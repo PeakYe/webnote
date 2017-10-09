@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.abaneo.xnote.api.dao.IUserDao">
+	<resultMap id="BaseResultMap" type="pers.abaneo.xnote.api.model.user.User">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+	</resultMap>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		delete from sys_user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="pers.abaneo.xnote.api.model.user.User">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_user (create_time, name,password,email)
+		values (#{createTime,jdbcType=TIMESTAMP},
+		#{name,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="pers.abaneo.xnote.api.model.user.User">
+		update sys_user
+		set create_time = #{createTime,jdbcType=TIMESTAMP},
+		name=#{createTime,jdbcType=VARCHAR},
+		password=#{createTime,jdbcType=VARCHAR},
+		email=#{createTime,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT} and deleted=0
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select id, name,password,email,create_time
+		from sys_user
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectByActiveAttr" parameterType="pers.abaneo.xnote.api.model.user.User"
+		resultMap="BaseResultMap">
+		select id, name,password,email,create_time
+		from sys_user
+		where 
+		<if test="id!=null">id=#{id}</if>
+		<if test="name!=null">name=#{name}</if>
+		<if test="email!=null">email=#{email}</if>
+	</select>
+</mapper>

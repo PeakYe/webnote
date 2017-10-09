@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>用户登录</title>
+	<link rel="stylesheet" href="http://localhost/javascripts/layer/skin/default/layer.css">
+	<link rel="stylesheet" href="http://localhost/javascripts/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://localhost/javascripts/common/common.css">
+
+	<script src="http://localhost/javascripts/require.js"></script>
+<!-- 	<script type="text/javascript" src="http://localhost/javascripts/config.js"></script> -->
+	<script type="text/javascript" src="../config.js"></script>
+	<!-- <script src="http://localhost/javascripts/jquery/jquery-3.2.1.min.js" ></script> -->
+	<!-- <script src="http://localhost/javascripts/layer/layer.js" ></script> -->
+
+	<style>
+	.foot *{ padding: 10px; color: #666; font-size: 1.4rem;}
+	</style>
+</head>
+
+<body >
+
+	<div class="container">
+		<!-- <div class="col-md-5 col-sm-12"></div> -->
+		<div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-4 ">
+			<div class="text-center">
+				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;"><br>
+				<h3>登录XNote</h3>
+			</div>
+			<div id="error"></div>
+			<form  role="form" action="/user/login" method="post" >
+				<div style="border:1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #fff;">
+			        <div class="form-group">
+			        	<label for="name">登录名</label>
+			            <input type="text" class="form-control" placeholder="name" id="name">
+			        </div>
+			        <div class="form-group">
+			        	<label for="password">密码</label> 
+			            <input type="password" class="form-control" placeholder="password" id="pwd">
+			            <p class="help-block">忘记密码？</p>
+			        </div>
+			        
+			        <div class="form-group" style="font-size:12rem;">
+			        	 <div class="checkbox" style="	font-size: 12px; ">
+							<label>
+								<input type="checkbox" id="remember-me" checked="checked"> 请记住我
+							</label>
+						</div>
+			        </div>
+			        <input id="login" type="button" class="btn btn-primary" style="width:100%;" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录"></input> 
+			        <br><br>
+
+				</div>
+		    </form>
+		    <br>
+		    
+		    <div class="alert alert-warning ">初来乍到？<a href="register.html">来签字画押(￣▽￣)／</a></div>
+			
+			<br>
+
+		</div>
+		<div class="foot text-center col-md-12 col-sm-12 col-xs-12"> 
+	          <span>联系我们</span><span>联系我们</span><span>联系我们</span>
+	    </div> 
+	</div>
+
+	<script type="text/javascript">
+		require(['jquery','c'],function($,c){
+			var redirect=c.getUrlParam('redirect');
+			$('#login').click(function(){
+				var name=$('#name').val();
+				if(name==null || name==''){
+					$('#name').focus();
+					return;
+				}
+				var pwd=$('#pwd').val();
+				if(pwd==null || pwd==''){
+					$('#pwd').focus();
+					return;
+				}
+				c.ajax({
+					url:'/user/login',
+					data:{
+						name:name,
+						pwd:pwd,
+						rememberMe: $('#remember-me').prop('checked')
+					},
+					success:function(r){
+						window.localStorage['user-name']=name;
+						if(r.data!=null){
+							location.href=r.data;
+						}else{
+							location.href="/";
+						}
+					},
+					failure:function(data){
+						$('#error').html('<div class="alert alert-danger alert-dismissable">用户名或密码错误</div>');
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>

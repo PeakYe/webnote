@@ -1,0 +1,31 @@
+#debug: true
+logging:
+  level: 
+    pers.abaneo.xnote.api.dao: debug
+    
+server:
+  port: 14000
+spring:
+  application:
+    name: xnote
+  redis:
+    database: 1
+    hostname: 47.94.106.96
+    port: 6379
+    password: 1124@redis
+    pool.max-active: 8
+    pool.max-idle: 8
+    pool.min-idle: 0
+    pool.max-wait: -1
+    timeout: 0
+  datasource:
+    url: jdbc:mysql://47.94.106.96:3306/test?useUnicode=true&characterEncoding=utf-8
+    username: mysql
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+    
+mybatis:
+  config-locations: classpath*:mybatis-config.xml
+  mapper-locations: classpath*:pers/abaneo/xnote/dao/mapper/*.xml
+    

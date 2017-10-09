@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>主页</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="http://localhost/javascripts/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
+<link rel="stylesheet"	href="http://localhost/javascripts/layer/mobile/need/layer.css">
+<link rel="stylesheet"	href="http://localhost/javascripts/common/common.css">
+<link href="http://localhost/javascripts/markdown/markdown.css"	rel="stylesheet" />
+<link	href="http://localhost/javascripts/highlight/highlight-default.css"	rel="stylesheet" />
+<!--   <link rel="stylesheet" type="text/css" href="http://localhost/javascripts/bootstrap-treeview/css/bootstrap-treeview.css"> -->
+<!-- <link href="http://localhost/javascripts/context/css/context.standalone.css" rel="stylesheet" />   -->
+<link rel="stylesheet" type="text/css"	href="http://localhost/javascripts/bootstrap-fileview/bootstrap-fileview.css">
+<link rel="stylesheet" type="text/css"	href="http://localhost/javascripts/toastr/toastr.min.css">
+
+<script src="http://localhost/javascripts/jquery/jquery-2.1.1.min.js"></script>
+<script src="http://localhost/javascripts/bootstrap/js/bootstrap.min.js"></script>
+<!-- <script src="http://localhost/javascripts/bootstrap/js/bootstrap-contextmenu.js"></script> -->
+<script	src="http://localhost/javascripts/bootstrap/js/BootstrapMenu.min.js"></script>
+
+<!-- <script src="http://localhost/javascripts/context/js/context.js"></script> -->
+
+<script src="http://localhost/javascripts/common/common.js"></script>
+
+<script src="http://localhost/javascripts/layer/layer.js"></script>
+
+<script src="http://localhost/javascripts/markdown/marked.js"></script>
+<script src="http://localhost/javascripts/highlight/highlight.pack.js"></script>
+<script	src="http://localhost/javascripts/bootstrap-treeview\js\bootstrap-treeview.js"></script>
+<script	src="http://localhost/javascripts/bootstrap-fileview/bootstrap-fileview.js"></script>
+<script	src="http://localhost/javascripts/pinyin/pinyin_dict_notone.js"></script>
+<script	src="http://localhost/javascripts/pinyin/pinyin_dict_withtone.js"></script>
+<script	src="http://localhost/javascripts/pinyin/pinyinUtil.js"></script>
+<script	src="http://localhost/javascripts/toastr/toastr.min.js"></script>
+
+
+<style type="text/css">
+	.head-img{ width:100px; border-radius: 50px; margin:15px;}
+	.head-text{ color:#fff; font-size:16px;}
+	.head-text:HOVER,.head-text:FOCUS { color:#fff; }
+</style>
+</head>
+<body>
+
+
+<!-- 	<nav class="navbar navbar-default " role="navigation"> -->
+<!-- 		<div class="container"> -->
+<!-- 			<div class="col-xs-12 col-sm-8 col-md-8" style="padding-left: 0px;"> -->
+<!-- 				<ul class="nav navbar-nav"> -->
+<!-- 					<li class=""><a href="#" -->
+<!-- 						style="font-size: 2.6rem; margin-left: 0px; padding-left: 0px;">XNote</a></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-xs-12 col-sm-4 col-md-4 "> -->
+<!-- 				<ul class="nav navbar-nav pull-right"> -->
+<!-- 											<li id="newxnote" class=""><a href="#" >写笔记</a></li> -->
+<!-- 					<li class=""><a class="dropdown-toggle" data-toggle="dropdown" -->
+<!-- 						href="#"><span id="user"></span><b class="caret"></a></b> -->
+<!-- 						<ul class="dropdown-menu"> -->
+<!-- 							<li><a href="#">个人中心</a></li> -->
+<!-- 							<li class="divider"></li> -->
+<!-- 							<li><a href="javascript:logout()">退出登录</a></li> -->
+<!-- 						</ul></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</nav> -->
+
+	<div id="tree"
+		style="position: absolute; top: 0px; bottom: 0px; width:374px;">
+	</div>
+	<div id="note-detail" style="position: absolute; top: 0px; bottom: 0px; right:0px;left:378px;min-width:640px;">
+		 <div id="container" class="hidden">
+			<h2 id="title">所有笔记</h2>
+			<div class="optbtns">
+			    <button id="btnedit" type="button" class="btn btn-link"><i class="glyphicon glyphicon-edit"></i> <span>编辑</span></button>
+			    <button id="btndel" type="button" class="btn btn-link"><i class="glyphicon glyphicon-floppy-remove"></i> 删除</button>
+			    <button id="btnview" type="button" class="btn btn-link"><span class="glyphicon glyphicon-copyright-mark"></span> 查看</button>
+			</div>
+			<div id="content">xxxxxxxxxxxx</div>
+	      </div>
+	</div>
+	<script type="text/javascript">
+
+		var currentBlog;
+		function showContent(id, el) {
+			var id=id.split('_')[1];
+			c.ajax({
+				url : '/service/xnote/get',
+				data : {
+					id : id
+				},
+				success : function(r) {
+					var data = r.data;
+					currentBlog = data;
+					$('#container').removeClass('hidden');
+					$('#title').text(data.title);
+					$('#content').html(marked(data.content));
+					// $(el).addClass('active').siblings().removeClass('active');
+				}
+			})
+		}
+
+		marked.setOptions({
+			renderer : new marked.Renderer(),
+			gfm : true,
+			tables : true,
+			breaks : false,
+			pedantic : false,
+			sanitize : true,
+			smartLists : true,
+			smartypants : false,
+			highlight : function(code) {
+				return hljs.highlightAuto(code).value;
+			}
+		});
+		$('#btnedit').click(function() {
+			//window.open('mkedit.html?xnoteId=' + currentBlog.id);
+			editblog(currentBlog.id);
+		})
+		$('#btnview').click(function() {
+			window.open('../view.html?xnoteId=' + currentBlog.id);
+		})
+		$('#btndel').click(function() {
+			layer.confirm('确认删除？', {
+				btn : [ '确定', '点错了' ]
+			}, function() {
+				layer.closeAll();
+				c.ajax({
+					url : '/service/xnote/delete.req',
+					data : {
+						id : currentBlog.id
+					},
+					success : function() {
+						$('#container').addClass('hidden');
+						menu.deleteMenu(currentBlog.id,function(del){
+							toastr.info('已删除笔记');
+						});
+					},
+					complete : function() {
+						layer.closeAll();
+					}
+				})
+			})
+		})
+
+		function newblog(group) {
+			layer.open({
+				type : 2,
+				area : [ '97%', '100%' ],
+				// fixed: true, //不固定
+				// maxmin: true,
+				content : 'mkedit.html?create=true&group=' + group,
+				scrollbar : false,
+				offset : 'r',
+				title : false,
+				closeBtn : 0
+				//shadeClose : true
+			});
+		}
+		
+		function editblog(xnoteId) {
+			layer.open({
+				type : 2,
+				area : [ '97%', '100%' ],
+				// fixed: true, //不固定
+				// maxmin: true,
+				content : 'mkedit.html?xnoteId='+xnoteId,
+				scrollbar : false,
+				offset : 'r',
+				title : false,
+				closeBtn : 0
+				//shadeClose : true,
+			});
+		}
+
+		function newblogCallback(id) {
+			if(id==null){
+				return;
+			}
+			c.ajax({
+				url : '/service/xnote/get',
+				data : {
+					id : id
+				},
+				success : function(r) {
+					var data = r.data;
+					createNoteMenu(data.id,data.groupId,data.title);
+					showContent('f_'+data.id);
+				}
+			})
+		}
+		
+		function editblogCallback(id){
+			if(id==null){
+				return;
+			}
+			c.ajax({
+				url : '/service/xnote/get',
+				data : {
+					id : id
+				},
+				success : function(r) {
+					var data = r.data;
+					menu.modifyMenu('f_'+data.id,{
+						id:'f_'+data.id,
+						parent:data.groupId,
+						text:data.title,
+						isfolder: false
+					})
+					//createNoteMenu(data.id,data.groupId,data.title);
+					showContent('f_'+data.id);
+				}
+			})
+		}
+
+		function logout() {
+			c.ajax({
+				url : '/service/user/logout',
+				success : function() {
+					location.href = "/user/login.html";
+				}
+			});
+		}
+
+		var menu;
+		function createNoteMenu(id,groupId,title){
+			menu.createMenu({
+				id:'f_'+id,
+				text:title,
+				parent:groupId,
+				isfolder: false,
+				prefix : '<i class="glyphicon glyphicon-file" ></i>',
+				click:function(row){
+					showContent(this.id);
+				}
+			});
+			//toastr.info('已创建文件夹 “'+title+'”')
+		}
+		
+		c.ajax({
+			url : '/service/xnote/listGroup.json',
+			success : function(r) {
+				var firstMenu = {};
+				var secondMenu = {};
+				//文件夹
+				for ( var i in r.data) {
+					var d = r.data[i];
+
+					if (!d.parentId) {
+						//一级菜单
+						firstMenu[d.id] = {
+							id : d.id,
+							text : d.name
+						}
+					} else {
+						//二级菜单
+						secondMenu[d.id] = {
+							id : d.id,
+							text : d.name,
+							parent : d.parentId
+						}
+					}
+
+					//笔记
+					for ( var j in d.notes) {
+						var note = d.notes[j];
+						var nnode = {
+							text : c.escapeHtml(note.title),
+							prefix : '<i class="glyphicon glyphicon-file" ></i>',
+							parent : note.groupId,
+							attrs : {
+								'note-id' : note.id
+							},
+							click:function(row){
+								showContent(this.id);
+							},
+							isfolder: false
+						}
+						secondMenu['f_'+note.id] = nnode;
+					}
+				}
+
+// 				console.log(firstMenu);
+// 				console.log(secondMenu);
+
+				menu = new FileView({
+					contain : '#tree',
+					mainHeadHtml : '<img class="head-img" src="/imgs/head.jpg" /><div class="dropdown"><a class="head-text" data-toggle="dropdown" href="#">'+c.escapeHtml(window.localStorage['user-name'])+'</a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> <li><a href="/service/user/logout.html">退出登录</a></li></ul></div>',
+					mainMenu : firstMenu
+				})
+				
+				$(".dropdown-toggle").dropdown('toggle');
+				menu.addSubMenu(secondMenu);
+				
+				if(!menu.showDefault()){
+					//
+				}
+				
+				menu.sortMenu();
+			}
+		})
+
+		var menu = new BootstrapMenu('.file-view-main ul,.file-view-main ul li', {
+			fetchElementData : function(row) {
+				return {
+					parent : row.attr('main-menu-id'),
+					deletedable : row.attr('deletedable'),
+					mainMenuId: row.attr('main-menu-id')
+				}
+			},
+
+			actions : [ {
+				name : '创建文件夹',
+				onClick : function(row) {
+					
+					layer.prompt({title: '文件夹名称', formType: 0, maxlength:20 }, function(text, index){
+						layer.close(index);
+						c.ajax({
+							url : '/service/xnote/group/create.json',
+							data : {
+								name : text
+							},
+							success : function(r) {
+								var d=r.data;
+								menu.createMenu({
+							 		id:d.id,
+							 		text: d.name,
+							 		parent:null
+							 	});
+							 	toastr.info('已创建文件夹 “'+d.name+'”');
+							}
+						})
+					});
+				}
+			},{
+				name : '删除文件夹',
+				onClick : function(row) {
+					
+					layer.confirm('确认删除？',{
+						btn:['是','点错了']
+					},function(index){
+						c.ajax({
+							url : '/service/xnote/group/delete.json',
+							data : {
+								id : row.mainMenuId
+							},
+							success : function(r) {
+								var d=r.data;
+								menu.deleteMenu(r.data);
+							}
+						});
+						layer.close(index);
+					});
+				},
+				isEnabled: function(row) {
+			        return row.deletedable==null?true:false;
+		    	}
+			} ]
+		});
+				
+		var menu = new BootstrapMenu('.sub-menu-ul li,.sub-menu-ul', {
+			fetchElementData : function(row) {
+				return {
+					isfolder: row.attr('isfolder')=='true',
+					folderId : row.attr('sub-menu-id'),
+					deleteable: !row.hasClass('sub-menu-ul'),
+					currentFolder: !(row.hasClass('sub-menu-ul'))?row.parent().attr('sub-menu-id'):row.attr('sub-menu-id')
+				}
+			},
+
+			actions : [ {
+				name : '创建笔记',
+				onClick : function(row) {
+					if(row.folderId==null){
+						layer.alert('需要先选择文件夹')
+						return ;
+					}
+					newblog(row.currentFolder);
+				}
+			}, {
+				name : '创建文件夹',
+				onClick : function(row) {
+					layer.prompt({title: '文件夹名称', formType: 0, maxlength:6 }, function(text, index){
+						layer.close(index);
+						c.ajax({
+							url : '/service/xnote/group/create.json',
+							data : {
+								parentId :row.currentFolder==null?null:row.currentFolder,
+								name : text
+							},
+							success : function(r) {
+								var d=r.data;
+								menu.createMenu({
+							 		id:d.id,
+							 		text: d.name,
+							 		parent: d.parentId
+							 	})
+							}
+						})
+					});
+				}
+			} ,{
+				name : '删除',
+				onClick : function(row) {
+					if(row.isfolder){
+						layer.confirm('确认删除？',{
+							btn:['是','点错了']
+						},function(index){
+							layer.close(index);
+							c.ajax({
+								url : '/service/xnote/group/delete.json',
+								data : {
+									id : row.folderId
+								},
+								success : function(r) {
+									var d=r.data;
+									menu.deleteMenu(row.folderId,function(del){
+										toastr.info('已删除文件夹 “'+del.text+'”')
+									});
+								}
+							});
+						});
+					}else{
+						layer.confirm('确认删除？',{
+							btn:['是','点错了']
+						},function(index){
+							layer.close(index);
+							c.ajax({
+								url : '/service/xnote/delete.json',
+								data : {
+									id : row.folderId.split('_')[1]
+								},
+								success : function(r) {
+									var d=r.data;
+									menu.deleteMenu(row.folderId,function(del){
+										toastr.info('已删除笔记 “'+del.text+'”')
+									});
+								}
+							});
+						});
+					}
+					
+				},
+				isEnabled: function(row) {
+			        return row.deleteable;
+		    	}
+			}]
+		});
+		
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+debug: true
+
+server:
+  port: 13105
+  address: 127.0.0.1
+  sessionTimeout: 30
+  contextPath: /
+spring:
+  application: 
+    name: xnote-service
+  datasource:
+    url: jdbc:mysql://47.94.106.96:3306/test?useUnicode=true&amp;characterEncoding=utf-8
+    username: mysql
+    password: 123456
+    driver-class: com.mysql.jdbc.Driver
+    max-idle: 10
+    max-wait: 10000
+    min-idle: 5
+    initial-size: 5
+    validation-query: SELECT 1
+    test-on-borrow: false
+    test-while-idle: true
+    time-between-eviction-runs-millis: 18800
+  redis:
+    database: 0
+    host: 47.94.106.96
+    port: 6379
+    password: 1124@redis
+    pool.max-active: 8
+    pool.max-idle: 8
+    pool.min-idle: 0
+    pool.max-wait: -1
+    timeout: 0
+
+mybatis:
+  #config-locations: classpath*:mybatis/mybatis-config.xml
+  #mapper-locations: classpath*:mybatis/mapper/*.xml
+  mapper-locations: classpath*:pers/abaneo/xnote/dao/xml/*.xml
+
+
+
+  
+  tomcat:
+    accessLogEnabled: false
+    protocolHeader: x-forwarded-proto
+    remoteIpHeader: x-forwarded-for
+    basedir:
+    backgroundProcessorDelay: 30 # secs
+  
+eureka:
+  environment: DEVLOCAL
+  client:
+    serviceUrl:
+      #defaultZone: http://47.94.106.96:13000/eureka/
+      defaultZone: http://ggg:13000/eureka/
+  instance:
+    #perferIpAddress: true
+    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    instance-id: ${eureka.instance.ip-address}:${server.port}
+    prefer-ip-address: true
+    ip-address: 127.0.0.1

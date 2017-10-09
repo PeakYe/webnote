@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>注册</title>
+	<link rel="stylesheet" href="http://localhost/javascripts/layer/skin/default/layer.css">
+	<link rel="stylesheet" href="http://localhost/javascripts/bootstrap/css/bootstrap.min.css">
+
+	<script src="http://localhost/javascripts/require.js"></script>
+	<script type="text/javascript" src="/config.js"></script>
+	<!-- <script src="http://localhost/javascripts/jquery/jquery-3.2.1.min.js" ></script> -->
+	<!-- <script src="http://localhost/javascripts/layer/layer.js" ></script> -->
+	<style>
+		.error{ color:red; font-weight: normal;}
+	</style>
+</head>
+
+<body >
+
+	
+	<div class="container">
+		<!-- <div class="col-md-5 col-sm-12"></div> -->
+		<div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-4 ">
+			<div class="text-center">
+				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;"><br>
+				<h3>登录XNote</h3>
+			</div>
+			<div id="error"></div>
+			<form  role="form" action="/user/login" method="post" >
+				<div style="border:1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #fff;">
+			        <div class="form-group">
+			        	<label for="name">邮箱&nbsp;<span class="error email hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label>
+			            <input type="text" class="form-control" placeholder="email" id="email">
+			        </div>
+			        <div class="form-group">
+			        	<label for="name">登录名&nbsp;<span class="error name hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label>
+			            <input type="text" class="form-control" placeholder="name" id="name">
+			        </div>
+			        <div class="form-group">
+			        	<label for="password">密码&nbsp;<span class="error pwd hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label> 
+			            <input type="password" class="form-control" placeholder="password" id="pwd">
+			        </div>
+			        <input id="login" type="button" class="btn btn-primary" style="width:100%;" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录"></input> 
+			        <br><br>
+
+				</div>
+		    </form>
+		    <br>
+		    
+		    <div class="alert alert-warning ">有账号？<a href="login.html">点此登录(￣▽￣)／</a></div>
+			
+			<br>
+
+		</div>
+		<div class="foot text-center col-md-12 col-sm-12 col-xs-12"> 
+	          <span>联系我们</span><span>联系我们</span><span>联系我们</span>
+	    </div> 
+	</div>
+
+	<script type="text/javascript">
+		require(['jquery','c'],function($,c){
+			$('#login').click(function(){
+				var email=$('#email').val();
+				if(email==null || email==''){
+					$('#email').focus();
+					return;
+				}
+				var name=$('#name').val();
+				if(name==null || name==''){
+					$('#name').focus();
+					return;
+				}
+				var pwd=$('#pwd').val();
+				if(pwd==null || pwd=='' || pwd.length<6){
+					$('#pwd').focus();
+					$('.error.pwd').removeClass('hidden').children('msg').text('密码长度至少6位');
+					return;
+				}
+				
+				$('.error').addClass('hidden');
+				$(this).text('登 录 中...');
+				var that=$(this);
+				c.ajax({
+					url:'/user/register',
+					data:{
+						name:name,
+						password:pwd,
+						email:email
+					},
+					success:function(r){
+						//layer.alert(r.data)
+						window.location.href="login.html"
+					},
+					failure:function(r){
+						var code=r.errCode;
+						if(code==1001){
+							$('.error.email').removeClass('hidden').children('msg').text('电子邮件已注册');
+							$('#email').focus();
+						}else if(code==1002){
+							$('.error.name').removeClass('hidden').children('msg').text('用户名已注册');
+							$('#name').focus();
+						}else if(code==1003){
+// 							$('.error.email').removeClass('hidden').children('msg').text('电子邮件已注册');
+						}
+					},complete:function(){
+						that.text('登    录');
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>

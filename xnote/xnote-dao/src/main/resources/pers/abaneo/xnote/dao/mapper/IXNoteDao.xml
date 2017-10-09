@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.abaneo.xnote.api.dao.IXNoteDao">
+  <resultMap id="BaseResultMap" type="pers.abaneo.xnote.api.model.xnote.XNote">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creater_id" jdbcType="BIGINT" property="createrId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="praises" jdbcType="INTEGER" property="praises" />
+    <result column="opposes" jdbcType="INTEGER" property="opposes" />
+    <result column="comments" jdbcType="INTEGER" property="comments" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  
+  <resultMap id="GroupResultMap" type="pers.abaneo.xnote.api.model.xnote.XNoteGroup">
+    <id column="group_id" jdbcType="BIGINT" property="id" />
+    <result column="creater_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+<!--     <association property="notes" column="group_id" javaType="pers.abaneo.xnote.api.model.xnote.XNote" resultMap="BaseResultMap"></association> -->
+    <collection property="notes" ofType="pers.abaneo.xnote.api.model.xnote.XNote" resultMap="BaseResultMap"></collection>
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from blog
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="pers.abaneo.xnote.api.model.xnote.XNote">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into blog (create_time, creater_id, title, 
+      group_id, type, label, 
+      praises, opposes, comments, 
+      deleted, content)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{createrId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{label,jdbcType=VARCHAR}, 
+      #{praises,jdbcType=INTEGER}, #{opposes,jdbcType=INTEGER}, #{comments,jdbcType=INTEGER}, 
+      #{deleted,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="pers.abaneo.xnote.api.model.xnote.XNote">
+    update blog
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      creater_id = #{createrId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT},
+      type = #{type,jdbcType=TINYINT},
+      label = #{label,jdbcType=VARCHAR},
+      praises = #{praises,jdbcType=INTEGER},
+      opposes = #{opposes,jdbcType=INTEGER},
+      comments = #{comments,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT} and deleted=0
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, create_time, creater_id, title, group_id, type, label, praises, opposes, 
+    comments, deleted, content
+    from blog
+    where id = #{id,jdbcType=BIGINT} and deleted=0
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, create_time, creater_id, title, group_id, type, label, praises, opposes, 
+    comments, deleted
+    from blog where deleted=0 order by id desc
+  </select>
+  
+  <!-- blog,limit -->
+  <select id="selectByActiveAttr" resultMap="BaseResultMap">
+    select id, create_time, creater_id, title, group_id, type, label, praises, opposes, 
+    comments, deleted, content
+    from blog
+    <where>
+	    <if test="param1.id!=null">
+	    	id=#{param1.id}
+	    </if>
+	    <if test="param1.createrId!=null">
+	    	and creater_id=#{param1.createrId}
+	    </if>
+	    <if test="param1.groupId!=null">
+	    	and group_id=#{param1.groupId}
+	    </if>
+	    <if test="param1.type!=null">
+	    	and type=#{param1.type}
+	    </if>
+	    and deleted = 0 order by id desc
+    </where>
+    <if test="param2!=null">
+    	limit ${param2}
+    </if>
+  </select>
+  
+  <select id="selectGroupsByUserId" resultMap="GroupResultMap" parameterType="long">
+  	select b.id, create_time, creater_id, title, g.id as group_id, type, label, praises,
+  	 opposes, comments, deleted, content,g.name ,g.parent_id
+  	from blog b right join (select *from xnote_group where user_id=#{param1}) g 
+  	 on b.group_id=g.id and b.deleted=0 order by group_id asc ,id asc 
+  </select>
+</mapper>

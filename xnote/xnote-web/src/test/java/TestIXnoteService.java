@@ -12,21 +12,21 @@ import pers.abaneo.xnote.api.service.IXNoteServie;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=XnoteWeb.class)
-public class TestIBlogService {
+public class TestIXnoteService {
 
 	@Autowired IXNoteServie service;
 	
 	@Test
 	public void testInteface() throws Exception {
 		User user=new User();
-		XNote blog=service.createBlog("test blog","xxxxxxxxxxx",12L,user);
-		System.out.println("blog create success"+blog.getId());
+		XNote xnote=service.createXnote("test xnote","xxxxxxxxxxx",12L,user);
+		System.out.println("xnote create success"+xnote.getId());
 		
-		service.updateBlog(blog.getId(), "test blog update", "ssssssssss", user);
-		System.out.println("blog update success");
+		service.updateXnote(xnote.getId(), "test xnote update", "ssssssssss", user);
+		System.out.println("xnote update success");
 		
-		service.deleteBlog(blog.getId(), user);
-		System.out.println("blog delte success");
+		service.deleteXnote(xnote.getId(), user);
+		System.out.println("xnote delte success");
 	}
 	
 	@Test

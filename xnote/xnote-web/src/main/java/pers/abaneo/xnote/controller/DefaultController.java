@@ -9,7 +9,7 @@ public class DefaultController extends BaseController{
 	
 	@RequestMapping("")
 	public String go(){
-		return "redirect:/blog/index.html";
+		return "redirect:/xnote/index.html";
 	}
 
 }

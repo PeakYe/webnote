@@ -3,10 +3,10 @@
 		server: '/service/'
 	}
 
-	var cdn="http://47.94.106.96:10002/scripts/";
+	var cdn="http://nobibi.site/scripts/";
 	require.config({
-		// baseUrl : "http://47.94.106.96:10002/scripts/",
-		baseUrl : "http://localhost/javascripts/",
+		baseUrl : cdn,
+		//baseUrl : "http://nobibi.site/scripts/",
 	    paths : {
 	        "jquery" : ["jquery/jquery-3.2.1.min"],
 	        "bootstrap": ["bootstrap/js/bootstrap",cdn+"bootstrap/js/bootstrap"],

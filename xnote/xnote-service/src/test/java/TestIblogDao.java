@@ -17,9 +17,9 @@ public class TestIblogDao {
 	@Test
 	public void testInteface() throws Exception {
 		dao.selectAll();
-		XNote blog=new XNote();
-		blog.setCreaterId(2000L);
-		List<XNote> list=dao.selectByActiveAttr(blog, 1);
+		XNote xnote=new XNote();
+		xnote.setCreaterId(2000L);
+		List<XNote> list=dao.selectByActiveAttr(xnote, 1);
 		System.out.println(list);
 	}
 	

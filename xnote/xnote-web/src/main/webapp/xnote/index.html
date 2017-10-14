@@ -4,73 +4,49 @@
 <title>主页</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="http://localhost/javascripts/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
-<link rel="stylesheet"	href="http://localhost/javascripts/layer/mobile/need/layer.css">
-<link rel="stylesheet"	href="http://localhost/javascripts/common/common.css">
-<link href="http://localhost/javascripts/markdown/markdown.css"	rel="stylesheet" />
-<link	href="http://localhost/javascripts/highlight/highlight-default.css"	rel="stylesheet" />
-<!--   <link rel="stylesheet" type="text/css" href="http://localhost/javascripts/bootstrap-treeview/css/bootstrap-treeview.css"> -->
-<!-- <link href="http://localhost/javascripts/context/css/context.standalone.css" rel="stylesheet" />   -->
-<link rel="stylesheet" type="text/css"	href="http://localhost/javascripts/bootstrap-fileview/bootstrap-fileview.css">
-<link rel="stylesheet" type="text/css"	href="http://localhost/javascripts/toastr/toastr.min.css">
+<link href="http://nobibi.site/scripts/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
+<link rel="stylesheet"	href="http://nobibi.site/scripts/layer/mobile/need/layer.css">
+<link rel="stylesheet"	href="http://nobibi.site/scripts/common/common.css">
+<link href="http://nobibi.site/scripts/markdown/markdown.css"	rel="stylesheet" />
+<link	href="http://nobibi.site/scripts/highlight/highlight-default.css"	rel="stylesheet" />
+<!--   <link rel="stylesheet" type="text/css" href="http://nobibi.site/scripts/bootstrap-treeview/css/bootstrap-treeview.css"> -->
+<!-- <link href="http://nobibi.site/scripts/context/css/context.standalone.css" rel="stylesheet" />   -->
+<link rel="stylesheet" type="text/css"	href="http://nobibi.site/scripts/bootstrap-fileview/bootstrap-fileview.css">
+<link rel="stylesheet" type="text/css"	href="http://nobibi.site/scripts/toastr/toastr.min.css">
 
-<script src="http://localhost/javascripts/jquery/jquery-2.1.1.min.js"></script>
-<script src="http://localhost/javascripts/bootstrap/js/bootstrap.min.js"></script>
-<!-- <script src="http://localhost/javascripts/bootstrap/js/bootstrap-contextmenu.js"></script> -->
-<script	src="http://localhost/javascripts/bootstrap/js/BootstrapMenu.min.js"></script>
+<script src="http://nobibi.site/scripts/jquery/jquery-2.1.1.min.js"></script>
+<script src="http://nobibi.site/scripts/bootstrap/js/bootstrap.min.js"></script>
+<!-- <script src="http://nobibi.site/scripts/bootstrap/js/bootstrap-contextmenu.js"></script> -->
+<script	src="http://nobibi.site/scripts/bootstrap/js/BootstrapMenu.min.js"></script>
 
-<!-- <script src="http://localhost/javascripts/context/js/context.js"></script> -->
+<!-- <script src="http://nobibi.site/scripts/context/js/context.js"></script> -->
 
-<script src="http://localhost/javascripts/common/common.js"></script>
+<script src="http://nobibi.site/scripts/common/common.js"></script>
 
-<script src="http://localhost/javascripts/layer/layer.js"></script>
+<script src="http://nobibi.site/scripts/layer/layer.js"></script>
 
-<script src="http://localhost/javascripts/markdown/marked.js"></script>
-<script src="http://localhost/javascripts/highlight/highlight.pack.js"></script>
-<script	src="http://localhost/javascripts/bootstrap-treeview\js\bootstrap-treeview.js"></script>
-<script	src="http://localhost/javascripts/bootstrap-fileview/bootstrap-fileview.js"></script>
-<script	src="http://localhost/javascripts/pinyin/pinyin_dict_notone.js"></script>
-<script	src="http://localhost/javascripts/pinyin/pinyin_dict_withtone.js"></script>
-<script	src="http://localhost/javascripts/pinyin/pinyinUtil.js"></script>
-<script	src="http://localhost/javascripts/toastr/toastr.min.js"></script>
+<script src="http://nobibi.site/scripts/markdown/marked.js"></script>
+<script src="http://nobibi.site/scripts/highlight/highlight.pack.js"></script>
+<script	src="http://nobibi.site/scripts/bootstrap-treeview\js\bootstrap-treeview.js"></script>
+<script	src="http://nobibi.site/scripts/bootstrap-fileview/bootstrap-fileview.js"></script>
+<script	src="http://nobibi.site/scripts/pinyin/pinyin_dict_notone.js"></script>
+<script	src="http://nobibi.site/scripts/pinyin/pinyin_dict_withtone.js"></script>
+<script	src="http://nobibi.site/scripts/pinyin/pinyinUtil.js"></script>
+<script	src="http://nobibi.site/scripts/toastr/toastr.min.js"></script>
 
 
 <style type="text/css">
 	.head-img{ width:100px; border-radius: 50px; margin:15px;}
 	.head-text{ color:#fff; font-size:16px;}
 	.head-text:HOVER,.head-text:FOCUS { color:#fff; }
+	#note-detail{position: absolute; top: 0px; bottom: 0px; right:0px;left:378px;min-width:640px; heightL:100%; overflow: auto; padding-right: 10px;}
 </style>
 </head>
 <body>
-
-
-<!-- 	<nav class="navbar navbar-default " role="navigation"> -->
-<!-- 		<div class="container"> -->
-<!-- 			<div class="col-xs-12 col-sm-8 col-md-8" style="padding-left: 0px;"> -->
-<!-- 				<ul class="nav navbar-nav"> -->
-<!-- 					<li class=""><a href="#" -->
-<!-- 						style="font-size: 2.6rem; margin-left: 0px; padding-left: 0px;">XNote</a></li> -->
-<!-- 				</ul> -->
-<!-- 			</div> -->
-<!-- 			<div class="col-xs-12 col-sm-4 col-md-4 "> -->
-<!-- 				<ul class="nav navbar-nav pull-right"> -->
-<!-- 											<li id="newxnote" class=""><a href="#" >写笔记</a></li> -->
-<!-- 					<li class=""><a class="dropdown-toggle" data-toggle="dropdown" -->
-<!-- 						href="#"><span id="user"></span><b class="caret"></a></b> -->
-<!-- 						<ul class="dropdown-menu"> -->
-<!-- 							<li><a href="#">个人中心</a></li> -->
-<!-- 							<li class="divider"></li> -->
-<!-- 							<li><a href="javascript:logout()">退出登录</a></li> -->
-<!-- 						</ul></li> -->
-<!-- 				</ul> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</nav> -->
-
 	<div id="tree"
 		style="position: absolute; top: 0px; bottom: 0px; width:374px;">
 	</div>
-	<div id="note-detail" style="position: absolute; top: 0px; bottom: 0px; right:0px;left:378px;min-width:640px;">
+	<div id="note-detail" style="" class="scroll-default">
 		 <div id="container" class="hidden">
 			<h2 id="title">所有笔记</h2>
 			<div class="optbtns">
@@ -117,10 +93,10 @@
 		});
 		$('#btnedit').click(function() {
 			//window.open('mkedit.html?xnoteId=' + currentBlog.id);
-			editblog(currentBlog.id);
+			editxnote(currentBlog.id);
 		})
 		$('#btnview').click(function() {
-			window.open('../view.html?xnoteId=' + currentBlog.id);
+			window.open('view.html?xnoteId=' + currentBlog.id);
 		})
 		$('#btndel').click(function() {
 			layer.confirm('确认删除？', {
@@ -145,7 +121,7 @@
 			})
 		})
 
-		function newblog(group) {
+		function newxnote(group) {
 			layer.open({
 				type : 2,
 				area : [ '97%', '100%' ],
@@ -160,7 +136,7 @@
 			});
 		}
 		
-		function editblog(xnoteId) {
+		function editxnote(xnoteId) {
 			layer.open({
 				type : 2,
 				area : [ '97%', '100%' ],
@@ -175,7 +151,7 @@
 			});
 		}
 
-		function newblogCallback(id) {
+		function newxnoteCallback(id) {
 			if(id==null){
 				return;
 			}
@@ -192,7 +168,7 @@
 			})
 		}
 		
-		function editblogCallback(id){
+		function editxnoteCallback(id){
 			if(id==null){
 				return;
 			}
@@ -377,7 +353,7 @@
 						layer.alert('需要先选择文件夹')
 						return ;
 					}
-					newblog(row.currentFolder);
+					newxnote(row.currentFolder);
 				}
 			}, {
 				name : '创建文件夹',

@@ -1,3 +1,4 @@
+
 #debug: true
 logging:
   level: 
@@ -6,6 +7,7 @@ logging:
 server:
   port: 14000
 spring:
+  profiles:active: dev
   application:
     name: xnote
   redis:
@@ -19,7 +21,7 @@ spring:
     pool.max-wait: -1
     timeout: 0
   datasource:
-    url: jdbc:mysql://47.94.106.96:3306/test?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://47.94.106.96:3306/xnote?useUnicode=true&characterEncoding=utf-8
     username: mysql
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

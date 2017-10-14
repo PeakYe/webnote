@@ -93,7 +93,7 @@ $(function(){
 			if (fileId == null) {
 				// new
 				url = '/service/xnote/create';
-				toastr.info('正在保存...');
+				//toastr.info('正在保存...');
 				c.ajax({
 					dataType: 'json',
 					url: url,
@@ -228,9 +228,9 @@ $(function(){
 			var index = parent.layer.getFrameIndex(window.name);
 			var isCreate = c.getUrlParamter('create')
 			if(isCreate!=null){
-			   parent.newblogCallback(fileId);
+			   parent.newxnoteCallback(fileId);
 			}else{
-			   parent.editblogCallback(fileId);
+			   parent.editxnoteCallback(fileId);
 			}
 			parent.layer.close(index);
 		    

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>查看详情</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://nobibi.site/scripts/markdown/markdown.css" rel="stylesheet" />     
+        <link href="http://nobibi.site/scripts/highlight/highlight-default.css" rel="stylesheet" />  
+        <link href="http://nobibi.site/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://nobibi.site/scripts/layer/mobile/need/layer.css">
+        
+
+        <script src="http://nobibi.site/scripts/jquery/jquery-3.2.1.min.js"></script>
+        <script src="http://nobibi.site/scripts/bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://nobibi.site/scripts/common/common.js"></script>
+
+        <script src="http://nobibi.site/scripts/layer/layer.js"></script>
+
+        <script src="http://nobibi.site/scripts/markdown/marked.js"></script>
+        <script src="http://nobibi.site/scripts/highlight/highlight.pack.js"></script>
+       
+
+
+        <style type="text/css">
+			#title{
+				padding-left:0px; line-height:50px; font-size:26px; font-weight:blod; text-align:center;
+				border-bottom: 1px solid #ccc; padding-bottom: 20px;font-family: Microsoft YaHei;
+			}
+			#content{ padding-left: 0px; margin-top: 20px;}
+        </style>
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-default " role="navigation">
+			<div class="container" style="padding: 0px;">
+		      <div class="col-xs-12 col-sm-8 col-md-8" style="padding-left: 0px;">
+		        <ul class="nav navbar-nav" >
+		            <li class=""><a href="#"  style="font-size: 2.6rem;margin-left: 0px;padding-left: 0px;">XNote</a></li>
+		        </ul>
+		      </div>
+		      <div class="col-xs-12 col-sm-4 col-md-4 ">
+					<ul id="userinfo" class="nav navbar-nav pull-right" >
+			        </ul>
+		      </div>
+		    </div>
+		</nav>
+		<script>
+			var name=window.localStorage['user-name'];
+			if(name!=null && name!='undefined'){
+// 		                    <li><a href="#">个人中心</a></li>\
+// 		                    <li class="divider"></li> \
+				$('#userinfo').append('<li class="">\
+		            	<a  class="dropdown-toggle" data-toggle="dropdown" href="#" ><span id="user"></span>'+name+'<b class="caret"></b></a>\
+		                <ul class="dropdown-menu">\
+		                    <li><a href="/service/user/logout">退出登录</a></li>\
+		                </ul>\
+		            </li>');
+			}else{
+				$('#userinfo').append('<li id="newxnote" class=""><a href="/user/login.html" >登录</a></li>	<li id="newxnote" class=""><a href="/user/register.html" >注册</a></li>');
+			}
+		</script>
+		
+		<div class="container">
+			<div class="row">
+				<div id="title"></div>
+			</div>
+			<div>
+				<div id="content"></div>
+			</div>
+		</div>
+		
+	     <script type="text/javascript">
+	        	
+	        	marked.setOptions({
+	              renderer: new marked.Renderer(),
+	              gfm: true,
+	              tables: true,
+	              breaks: false,
+	              pedantic: false,
+	              sanitize: true,
+	              smartLists: true,
+	              smartypants: false,
+	              highlight: function (code) {
+	                   return hljs.highlightAuto(code).value;
+	                  }
+	            });
+	        	var iload=layer.load();
+	        	c.ajax({
+	       			url:'/service/xnote/view.json',
+	       			data:{id:c.getUrlParamter('xnoteId')},
+	       			success:function(r){
+	       				var data=r.data;
+	       				$('#title').text(data.title);
+	       				$('#content').html(marked(data.content));
+	       			},
+	       			complete:function(){
+	       				layer.close(iload);
+	       			}
+	       		})
+	        </script>
+	        
+	      </body>
+</html>

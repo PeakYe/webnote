@@ -9,17 +9,19 @@ import pers.abaneo.web.utils.model.ResultModel;
 
 public interface IXNoteServie {
 
-	XNote getUserBlog(Long blogId,  User user);
-
-	XNote createBlog(String title, String content,Long groupId, User User);
-
-	void updateBlog(Long id, String title, String content, User user);
-
-	List<XNote> getBlogsByUser(User User);
+	XNote getUserXnote(Long xnoteId,  User user);
 	
-	List<XNoteGroup> getBlogGroups(User user);
+	XNote getXnote(Long xnoteId);
 
-	ResultModel deleteBlog(Long id, User user);
+	XNote createXnote(String title, String content,Long groupId, User User);
+
+	void updateXnote(Long id, String title, String content, User user);
+
+	List<XNote> getXnotesByUser(User User);
+	
+	List<XNoteGroup> getXnoteGroups(User user);
+
+	ResultModel deleteXnote(Long id, User user);
 
 	XNoteGroup createGroup(String name,Long parentGroupId, User user);
 

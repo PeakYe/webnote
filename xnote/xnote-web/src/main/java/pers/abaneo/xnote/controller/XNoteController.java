@@ -29,40 +29,50 @@ public class XNoteController {
 		if (StringUtils.isEmpty(title)) {
 			return new ResultModel(false, "标题不能为空");
 		}
-		XNote blog = servie.createBlog(title, content,group, user);
-		return new ResultModel(true).setData(blog.getId());
+		XNote xnote = servie.createXnote(title, content,group, user);
+		return new ResultModel(true).setData(xnote.getId());
 	}
 
 	@RequestMapping("/update")
 	public ResultModel update(Long id, String content, String title, User user) {
-		servie.updateBlog(id, title, content, user);
+		servie.updateXnote(id, title, content, user);
 		return new ResultModel(true);
 	}
 
 	@RequestMapping("/delete")
 	public ResultModel delete(Long id, User user) {
-		return servie.deleteBlog(id, user);
+		return servie.deleteXnote(id, user);
 	}
 
 	@RequestMapping("/get")
 	public ResultModel get(Long id, User user) {
-		XNote blog = servie.getUserBlog(id, user);
-		if (blog == null) {
+		XNote xnote = servie.getUserXnote(id, user);
+		if (xnote == null) {
 			return new ResultModel(false, "null");
 		} else {
-			return new ResultModel(true).setData(blog);
+			return new ResultModel(true).setData(xnote);
 		}
 	}
 
 	@RequestMapping("/list")
 	public ResultModel list(User user) {
-		List<XNote> list = servie.getBlogsByUser(user);
+		List<XNote> list = servie.getXnotesByUser(user);
 		return new ResultModel(true).setData(list);
+	}
+	
+	@RequestMapping("/view")
+	public ResultModel getXnote(Long id) {
+		XNote xnote = servie.getXnote(id);
+		if (xnote == null) {
+			return new ResultModel(false, "null");
+		} else {
+			return new ResultModel(true).setData(xnote);
+		}
 	}
 	
 	@RequestMapping("/listGroup")
 	public ResultModel listGroup(User user) {
-		List<XNoteGroup> list = servie.getBlogGroups(user);
+		List<XNoteGroup> list = servie.getXnoteGroups(user);
 		return new ResultModel(true).setData(list);
 	}
 
@@ -83,5 +93,7 @@ public class XNoteController {
 		servie.deleteGroup(id);
 		return new ResultModel(true,"").setData(id);
 	}
+	
+	
 
 }

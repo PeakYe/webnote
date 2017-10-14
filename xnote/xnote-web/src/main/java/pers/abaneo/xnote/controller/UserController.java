@@ -69,7 +69,7 @@ public class UserController extends BaseController{
 				String url=savedReq.getRequestUrl();
 				return new ResultModel(url);
 			}
-			return new ResultModel("/blog/index.html");
+			return new ResultModel("/xnote/index.html");
 					
 		} catch (AuthenticationException e) {
 			logger.debug(e.getMessage());
@@ -87,6 +87,6 @@ public class UserController extends BaseController{
 	@RequestMapping("logout")
 	public String logout(){
 		SecurityUtils.getSubject().logout();
-		return "redirect:/user/login.html";
+		return "redirect:/user/login.html?logout=true";
 	}
 }

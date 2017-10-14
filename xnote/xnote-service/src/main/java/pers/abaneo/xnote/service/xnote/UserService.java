@@ -1,4 +1,4 @@
-package pers.abaneo.xnote.service.blog;
+package pers.abaneo.xnote.service.xnote;
 
 import java.util.Date;
 import java.util.List;

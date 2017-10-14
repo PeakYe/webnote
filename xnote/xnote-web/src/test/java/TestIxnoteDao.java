@@ -15,16 +15,16 @@ import pers.abaneo.xnote.api.model.xnote.XNoteGroup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=XnoteWeb.class)
-public class TestIblogDao {
+public class TestIxnoteDao {
 
 	@Autowired IXNoteDao dao;
 	
 //	@Test
 	public void testInteface() throws Exception {
 		dao.selectAll();
-		XNote blog=new XNote();
-		blog.setCreaterId(2000L);
-		List<XNote> list=dao.selectByActiveAttr(blog, 1);
+		XNote xnote=new XNote();
+		xnote.setCreaterId(2000L);
+		List<XNote> list=dao.selectByActiveAttr(xnote, 1);
 		System.out.println(list);
 	}
 	

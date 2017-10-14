@@ -14,7 +14,7 @@ public interface IXNoteDao {
 
     List<XNote> selectAll();
     
-    List<XNote> selectByActiveAttr(XNote blog,Integer limit);
+    List<XNote> selectByActiveAttr(XNote xnote,Integer limit);
 
     int updateByPrimaryKey(XNote record);
     

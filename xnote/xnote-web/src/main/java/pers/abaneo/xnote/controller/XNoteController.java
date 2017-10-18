@@ -1,10 +1,16 @@
 package pers.abaneo.xnote.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +29,11 @@ import pers.abaneo.web.utils.model.ResultModel;
 public class XNoteController {
 	@Autowired
 	IXNoteServie servie;
+	
+	private FileManager fileManager;
+	
+	@Value("${file.upload.path}")
+	private String uploadPath;
 
 	@RequestMapping("/create")
 	public ResultModel create(String content, String title,Long group, User user) {
@@ -77,9 +88,24 @@ public class XNoteController {
 	}
 
 	@RequestMapping("/uploadImg")
-	public ResultModel uploadImg(MultipartHttpServletRequest request) throws IllegalStateException, IOException {
-		List<String> fileNames = FileManager.saveFiles(request);
-		return new ResultModel(fileNames);
+	public ResultModel uploadImg(String imgData){
+		if(this.fileManager==null){
+			fileManager=new FileManager();
+			fileManager.setUploadPath(uploadPath);
+		}
+		File file = fileManager.saveCodeImg(imgData);
+		return new ResultModel(file.getName());
+	}
+	
+	@RequestMapping("{fileName}.{suffix}")
+	public void readImg(@PathVariable("fileName") String fileName, @PathVariable("suffix") String suffix,
+			HttpServletResponse response) throws IOException {
+		if(this.fileManager==null){
+			fileManager=new FileManager();
+			fileManager.setUploadPath(uploadPath);
+		}
+		response.setContentType("image/*");
+		fileManager.readFile(fileName+"."+suffix, response);
 	}
 	
 	@RequestMapping("/group/create")

@@ -70,12 +70,12 @@ $(function(){
 				// document.body.appendChild( img );
 				// acen_edit.insert('![简短的图片]('+e.target.result+') ')
 				c.ajax({
-					url: '/files/uploadImgData',
+					url: '/service/xnote/uploadImg',
 					data: {
 						imgData: e.target.result
 					},
 					success: function(r) {
-						acen_edit.insert('![](/files/' + r.data + ')  ');
+						acen_edit.insert('![](/service/xnote/' + r.data + ')  ');
 					}
 				})
 			};

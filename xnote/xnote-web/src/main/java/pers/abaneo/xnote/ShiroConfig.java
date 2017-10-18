@@ -43,9 +43,14 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断,
+        // 约定:**/view* 为非用户登录情况可查看
+        // 约定:**/detail* 为用户登录情况可查看
+        filterChainDefinitionMap.put("**/detail*", "user");
+        filterChainDefinitionMap.put("**/view.html", "user");
+        
         filterChainDefinitionMap.put("/user/**", "anon");
-        filterChainDefinitionMap.put("/xnote/**", "user");
-        filterChainDefinitionMap.put("/service/xnote/**", "user");
+        filterChainDefinitionMap.put("/xnote/**", "anon");
+        filterChainDefinitionMap.put("/service/xnote/**", "anon");
 
         filterChainDefinitionMap.put("/user/logout", "anon");
 

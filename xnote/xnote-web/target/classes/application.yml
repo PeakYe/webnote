@@ -30,4 +30,8 @@ spring:
 mybatis:
   config-locations: classpath*:mybatis-config.xml
   mapper-locations: classpath*:pers/abaneo/xnote/dao/mapper/*.xml
+  
+file:
+  upload:
+    path: /home/data/xnote/upload
     

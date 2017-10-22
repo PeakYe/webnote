@@ -4,31 +4,15 @@ var acen_edit;
 
 $(function(){
 	(function(){
-		marked.setOptions({
-			renderer: new marked.Renderer(),
-			gfm: true,
-			tables: true,
-			breaks: false,
-			pedantic: false,
-			wrap: 'free',
-			sanitize: true,
-			smartLists: true,
-			smartypants: false,
-			// animatedScroll: true,
-			highlight: function(code) {
-				return hljs.highlightAuto(code).value;
-			}
-		});
 		acen_edit = ace.edit('mdeditor');
 		acen_edit.setTheme('ace/theme/xcode');
 		acen_edit.getSession().setMode('ace/mode/markdown');
 		// 自动换行
 		acen_edit.getSession().setOption('wrap', 'free');
 		acen_edit.renderer.setShowPrintMargin(false);;
-		console.log(acen_edit);
-		$("#mdeditor").keyup(function() {
-			$("#preview").html(marked(acen_edit.getValue()));
-		});
+//		$("#mdeditor").keyup(function() {
+//		
+//		});
 		
 	})();
 	
@@ -70,7 +54,7 @@ $(function(){
 				// document.body.appendChild( img );
 				// acen_edit.insert('![简短的图片]('+e.target.result+') ')
 				c.ajax({
-					url: '/service/xnote/uploadImg',
+					url: '/service/xnote/upload/img',
 					data: {
 						imgData: e.target.result
 					},
@@ -116,7 +100,6 @@ $(function(){
 				})
 			} else {
 				// edit
-				toastr.info('正在保存...');
 				url = '/service/xnote/update';
 				c.ajax({
 					dataType: 'json',
@@ -144,7 +127,7 @@ $(function(){
 				shade: 0.3
 			});
 			c.ajax({
-				url: '/service/xnote/get',
+				url: '/service/xnote/detail',
 				data: {
 					id: fileId
 				},
@@ -158,9 +141,32 @@ $(function(){
 		}
 	}
 	{
+		 //init
+	    marked.setOptions({
+			renderer: new marked.Renderer(),
+			gfm: true,
+			tables: true,
+			breaks: false,
+			pedantic: false,
+			wrap: 'free',
+			sanitize: true,
+			smartLists: true,
+			smartypants: false,
+			// animatedScroll: true,
+			highlight: function(code) {
+				return hljs.highlightAuto(code).value;
+			}
+		});
+	    
+	    var renderer = new marked.Renderer();
+
+	    renderer.link = function (href,title,text) {
+	    	return '<a href="'+href+'" target="_blank">'+text+'</a>';
+	    };
+		
 		var r = $("#preview-column");
 		acen_edit.on('change',function(e){
-			$("#preview").html(marked(acen_edit.getValue()));
+			$("#preview").html(marked(acen_edit.getValue(),{renderer:renderer}));
 			var scrollHeight = $(".ace_scrollbar-v").prop('scrollHeight');
 	        var scrollTop = acen_edit.session.getScrollTop();
 	        var height = $(".ace_scrollbar-v").height();
@@ -178,7 +184,7 @@ $(function(){
 		acen_edit.on('paste',function(e){
 			var pattern=/^(http:|https:|ftp:)+/;
 			if(pattern.test(e.text)){
-				e.text=('[]('+e.text+')');
+				e.text=('[链接]('+e.text+')');
 			}
 		})
 	}
@@ -188,8 +194,6 @@ $(function(){
 	(function() {
 	    var l = $("#mdeditor");
 	    var r = $("#preview-column");
-	    
-	    //init
 	    
 	    var scrollRight = false;
 	    l.mouseover(function() {
@@ -236,4 +240,30 @@ $(function(){
 		    
 		});
 	})()
+	
+	$(function(){
+		$('.aceedit-insert').click(function(){
+			var posx=$(this).attr('posx');
+			var text=$(this).attr('text');
+			console.log(acen_edit)
+//			console.log(acen_edit.getCursorPosition())
+//			acen_edit.moveCursorTo(acen_edit.getCursorPosition().row,0)
+			if(posx!=null){
+				var positionColumn=acen_edit.getCursorPosition().column;
+				acen_edit.navigateTo(acen_edit.getCursorPosition().row,posx);
+				
+			}
+//			console.log(acen_edit.moveCursorToPosition())
+			acen_edit.insert(text);
+			acen_edit.navigateTo(acen_edit.getCursorPosition().row,positionColumn+text.length)
+			acen_edit.focus();
+		});
+		
+		$('.aceedit-select').click(function(){
+			var format=$(this).attr('format');
+			var text=acen_edit.getSelectedText();
+			acen_edit.insert(format+text+format)
+			acen_edit.focus();
+		});
+	})
 })

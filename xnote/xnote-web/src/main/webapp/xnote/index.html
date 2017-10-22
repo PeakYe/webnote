@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>主页</title>
+<title>码奴笔记本</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="http://nobibi.site/scripts/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
@@ -40,6 +40,7 @@
 	.head-text{ color:#fff; font-size:16px;}
 	.head-text:HOVER,.head-text:FOCUS { color:#fff; }
 	#note-detail{position: absolute; top: 0px; bottom: 0px; right:0px;left:378px;min-width:640px; heightL:100%; overflow: auto; padding-right: 10px;}
+/* 	#content img{ max-width: 100%;} */
 </style>
 </head>
 <body>
@@ -54,7 +55,7 @@
 			    <button id="btndel" type="button" class="btn btn-link"><i class="glyphicon glyphicon-floppy-remove"></i> 删除</button>
 			    <button id="btnview" type="button" class="btn btn-link"><span class="glyphicon glyphicon-copyright-mark"></span> 查看</button>
 			</div>
-			<div id="content">xxxxxxxxxxxx</div>
+			<div id="content" class="markdown-body ">xxxxxxxxxxxx</div>
 	      </div>
 	</div>
 	<script type="text/javascript">
@@ -63,7 +64,7 @@
 		function showContent(id, el) {
 			var id=id.split('_')[1];
 			c.ajax({
-				url : '/service/xnote/get',
+				url : '/service/xnote/detail',
 				data : {
 					id : id
 				},
@@ -72,14 +73,18 @@
 					currentBlog = data;
 					$('#container').removeClass('hidden');
 					$('#title').text(data.title);
-					$('#content').html(marked(data.content));
+					$('#content').html(marked(data.content),{renderer:renderer});
 					// $(el).addClass('active').siblings().removeClass('active');
 				}
 			})
 		}
 
+		var renderer = new marked.Renderer();
+	    renderer.link = function (href,title,text) {
+	    	return '<a href="'+href+'" target="_blank">'+text+'</a>';
+	    };
 		marked.setOptions({
-			renderer : new marked.Renderer(),
+			renderer : renderer,
 			gfm : true,
 			tables : true,
 			breaks : false,
@@ -91,6 +96,7 @@
 				return hljs.highlightAuto(code).value;
 			}
 		});
+		
 		$('#btnedit').click(function() {
 			//window.open('mkedit.html?xnoteId=' + currentBlog.id);
 			editxnote(currentBlog.id);
@@ -156,7 +162,7 @@
 				return;
 			}
 			c.ajax({
-				url : '/service/xnote/get',
+				url : '/service/xnote/detail',
 				data : {
 					id : id
 				},
@@ -173,7 +179,7 @@
 				return;
 			}
 			c.ajax({
-				url : '/service/xnote/get',
+				url : '/service/xnote/detail',
 				data : {
 					id : id
 				},
@@ -216,7 +222,7 @@
 		}
 		
 		c.ajax({
-			url : '/service/xnote/listGroup.json',
+			url : '/service/xnote/group/detaillist.json',
 			success : function(r) {
 				var firstMenu = {};
 				var secondMenu = {};

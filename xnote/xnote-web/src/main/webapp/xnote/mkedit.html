@@ -32,7 +32,7 @@
             html,
             body {
                 width: 100%;
-                height: 100%;
+                height:99.9%;
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 background-color: #ebebeb;
             }
@@ -42,8 +42,9 @@
                 width: 100%;
                 color: #666; line-height: 24px;padding-left: 20px;
             }
-			#toolbar >*{ margin: 0 5px; border: 1px #fff; float: left; padding: 0 10px; cursor: pointer;	}
-			#toolbar >*:HOVER{color: #222;}
+			#toolbar span{ margin: 0 2px; border: 1px #fff; padding: 0 2px; cursor: pointer;	font-weight: bold;}
+			#toolbar .group{ display: inline; margin: 0 4px;}
+			#toolbar span:HOVER{color: #222;}
             #container {
                 overflow: auto;
                 position: absolute;
@@ -84,21 +85,44 @@
 			#title{ border:none; width: auto; padding: 10px 42px; width: 100%; margin: 0px; font-weight: bold;}
 			.title{ margin: 1px 0px; }
 			
+			.sace_scrollbar-v::-webkit-scrollbar-track,.ace_scrollbar-v::-webkit-scrollbar-track
+			{
+				-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+				border-radius: 7px;
+				background-color: #F5F5F5;
+			}
+			.sace_scrollbar-v::-webkit-scrollbar,.ace_scrollbar-v::-webkit-scrollbar
+			{
+				width: 10px;
+				background-color: #F5F5F5;
+			}
+			
+			.sace_scrollbar-v::-webkit-scrollbar-thumb,.ace_scrollbar-v::-webkit-scrollbar-thumb
+			{
+				border-radius: 7px;
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+				background-color: #ccc;
+			}
         </style>
     </head>
 
     <body>
         <h3 class="title"><input id="title" type="text" placeholder="TITLE..."> </h3> 
         <div id="toolbar">
-            <div id="closeIframe"><i class="glyphicon glyphicon-remove"></i></div>
-<!--         	<div class="save"><i class="glyphicon glyphicon-bold"></i></div> -->
-<!--         	<div class="save"><i class="glyphicon glyphicon-italic"></i></div> -->
-<!--         	<div class="save"><i class="glyphicon glyphicon-link"></i></div> -->
-<!--         	<div class="save"><i class="glyphicon glyphicon-list"></i></div> -->
-        	<div class="save"><i class="glyphicon glyphicon-floppy-open"></i></div>
-
-            
-        	<div class=""><i class=""></i></div>
+            <div id="closeIframe" class="group"><span><i class="glyphicon glyphicon-remove"></i></span></div>
+        	<span class="save group"><i class="glyphicon glyphicon-floppy-open"></i></span>
+            <div class="group">
+	            <span class="aceedit-insert" posx="0" text="# ">H1</span>
+	            <span class="aceedit-insert" posx="0" text="## ">H2</span>
+	            <span class="aceedit-insert" posx="0" text="### ">H3</span>
+	            <span class="aceedit-insert" posx="0" text="#### ">H4</span>
+	            <span class="aceedit-insert" posx="0" text="##### ">H5</span>
+	            <span class="aceedit-insert" posx="0" text="###### ">H6</span>
+            </div>
+        	<div class="group"><i class="glyphicon glyphicon-bold aceedit-select" format="**"></i></div>
+        	<div class="group"><i class="glyphicon glyphicon-italic aceedit-select" format="*"></i></div>
+<!--         	<div class="group"><i class="glyphicon glyphicon-link"></i></div> -->
+        	<div class="group"><i class="glyphicon glyphicon-list aceedit-insert" posx="0" text="- "></i></div>
         </div>
        
         <div id="container">

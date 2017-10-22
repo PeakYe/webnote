@@ -43,19 +43,28 @@ public class ShiroConfig {
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // 配置不会被拦截的链接 顺序判断,
-        // 约定:**/view* 为非用户登录情况可查看
-        // 约定:**/detail* 为用户登录情况可查看
-        filterChainDefinitionMap.put("**/detail*", "user");
-        filterChainDefinitionMap.put("**/view.html", "user");
-        
-        filterChainDefinitionMap.put("/user/**", "anon");
-        filterChainDefinitionMap.put("/xnote/**", "anon");
-        filterChainDefinitionMap.put("/service/xnote/**", "anon");
-
-        filterChainDefinitionMap.put("/user/logout", "anon");
-
+        // ** 不能放在最前
+        // 相同匹配规则后面覆盖前面
+        // 不同匹配规则匹配同一个url,第一个有效
+        // 静态资源
         filterChainDefinitionMap.put("/**/*.js", "anon");
-        filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**/*.png", "anon");
+        // 登录注册
+        filterChainDefinitionMap.put("/user/**", "anon");
+        filterChainDefinitionMap.put("/service/user/**", "anon");
+//        filterChainDefinitionMap.put("/xnote/**", "user");
+//        filterChainDefinitionMap.put("/service/xnote/**", "user");
+
+        // 默认的配置
+        // 约定:/**/view* 为非用户登录情况可查看
+        // 约定:/**/detail* 为用户登录情况可查看
+        filterChainDefinitionMap.put("/**/view*", "anon");
+        filterChainDefinitionMap.put("/**/create*", "user");
+        filterChainDefinitionMap.put("/**/detail*", "user");
+        filterChainDefinitionMap.put("/**/update*", "user");
+        filterChainDefinitionMap.put("/**/delete*", "user");
+        filterChainDefinitionMap.put("/**/upload*", "user");
+        filterChainDefinitionMap.put("/**", "user");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

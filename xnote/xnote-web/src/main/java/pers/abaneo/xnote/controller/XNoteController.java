@@ -5,17 +5,14 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import pers.abaneo.xnote.api.model.user.User;
 import pers.abaneo.xnote.api.model.xnote.XNote;
@@ -55,7 +52,7 @@ public class XNoteController {
 		return servie.deleteXnote(id, user);
 	}
 
-	@RequestMapping("/get")
+	@RequestMapping("/detail")
 	public ResultModel get(Long id, User user) {
 		XNote xnote = servie.getUserXnote(id, user);
 		if (xnote == null) {
@@ -65,7 +62,7 @@ public class XNoteController {
 		}
 	}
 
-	@RequestMapping("/list")
+	@RequestMapping("/detaillist")
 	public ResultModel list(User user) {
 		List<XNote> list = servie.getXnotesByUser(user);
 		return new ResultModel(true).setData(list);
@@ -81,13 +78,13 @@ public class XNoteController {
 		}
 	}
 	
-	@RequestMapping("/listGroup")
+	@RequestMapping("/group/detaillist")
 	public ResultModel listGroup(User user) {
 		List<XNoteGroup> list = servie.getXnoteGroups(user);
 		return new ResultModel(true).setData(list);
 	}
 
-	@RequestMapping("/uploadImg")
+	@RequestMapping("/upload/img")
 	public ResultModel uploadImg(String imgData){
 		if(this.fileManager==null){
 			fileManager=new FileManager();
@@ -104,7 +101,7 @@ public class XNoteController {
 			fileManager=new FileManager();
 			fileManager.setUploadPath(uploadPath);
 		}
-		response.setContentType("image/*");
+//		response.setContentType("image/*");
 		fileManager.readFile(fileName+"."+suffix, response);
 	}
 	

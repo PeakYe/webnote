@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN" "\\urlrewrite3.2.dtd">
+<urlrewrite>
+	<rule>
+		<from>/user/*.html</from>
+		<to type="forward">/user/$1</to>
+	</rule>
+<!-- 	<rule> -->
+<!-- 		<from>/user/register.html</from> -->
+<!-- 		<to type="forward">/user/login</to> -->
+<!-- 	</rule> -->
+</urlrewrite>

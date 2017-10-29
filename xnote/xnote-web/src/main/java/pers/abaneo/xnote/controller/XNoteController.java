@@ -69,7 +69,7 @@ public class XNoteController {
 	}
 	
 	@RequestMapping("/view")
-	public ResultModel getXnote(Long id) {
+	public ResultModel view(Long id) {
 		XNote xnote = servie.getXnote(id);
 		if (xnote == null) {
 			return new ResultModel(false, "null");

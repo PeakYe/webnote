@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<#include "/public/head.html">
+<html>
+    <head>
+        <title>${xnote.title?html}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://${cdn}/markdown/markdown.css" rel="stylesheet" />     
+        <link href="http://${cdn}/highlight/highlight-default.css" rel="stylesheet" />  
+        <link href="http://${cdn}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://${cdn}/layer/mobile/need/layer.css">
+        <link rel="stylesheet" href="http://${cdn}/common/common.css">
+        
+        <script src="http://${cdn}/jquery/jquery-3.2.1.min.js"></script>
+        <script src="http://${cdn}/bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://${cdn}/common/common.js"></script>
+        <script src="http://${cdn}/layer/layer.js"></script>
+        <script src="http://${cdn}/markdown/marked.js"></script>
+        <script src="http://${cdn}/highlight/highlight.pack.js"></script>
+
+        <style type="text/css">
+			#title{
+				padding-left:0px; line-height:50px; font-size:36px; font-weight:blod; text-align: left;
+				padding-bottom: 20px;font-family: Microsoft YaHei; margin-top:60px;
+			}
+			#content{ padding-left: 0px; margin-top: 20px;}
+			.bottom{ margin-top: 180px; }
+			.creater{ margin: 46px 26px; font-size: 1.6rem; white-space: nowrap;}
+			.dir{
+				margin: 0px 20px; list-style-type: none; font-size: 16px; border-left: 6px solid #f5f5f5; padding-left: 10px;
+				position: fixed; overflow: auto; bottom: 0px; top:80px; font-family: 微软雅黑, PTSans, Arial, sans-serif; max-width: 25%;
+				overflow-x: hidden;
+			}
+			.dir-h1 a{ padding-left: 0px; font-size: 18px; margin-top: 10px}
+			.dir-h2 a{ padding-left: 10px; font-size: 16px; margin-top: 4px}
+			.dir-h3 a{ padding-left: 20px; font-size: 16px; margin-top: 4px}
+			.dir-h4 a{ padding-left: 30px; font-size: 16x; margin-top: 4px}
+			.dir-h5 a{ padding-left: 40px; font-size: 16px; margin-top: 4px}
+			.dir-h6 a{ padding-left: 50px; font-size: 16px; margin-top: 4px}
+        </style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="col-xs-12 col-sm-9 col-md-9" style="padding-left: 0px;">
+				<div id="title">${xnote.title?html}</div>
+				<div>
+					<span class="label label-default">信息标签</span>
+					<span class="label label-default">信息标签</span>
+					<span class="label label-default">信息标签</span>
+				</div>
+				<p class="author">————${author.name}</p>
+				<div>
+					<div style="display: none;" id="hidden_content" >${xnote.content?html}</div>
+					<div id="content" class="markdown-body"></div>
+					<p class="bottom"></p>
+				</div>
+		      </div>
+		      <div class="col-xs-12 col-sm-3 col-md-3 ">
+		      		<p class="creater">作者：${user.name}</p>
+					<div class="dir scroll-style-1">
+						<div class="dir-h1"><a href="javascript:toh('top')">TOP</a></div>
+					</div>
+		      </div>
+		</div>
+		
+	     <script type="text/javascript">
+	        	
+	        	var renderer = new marked.Renderer();
+	    	    renderer.link = function (href,title,text) {
+	    	    	return '<a href="'+href+'" target="_blank">'+text+'</a>';
+	    	    };
+	        	marked.setOptions({
+	              renderer: renderer,
+	              gfm: true,
+	              tables: true,
+	              breaks: false,
+	              pedantic: false,
+	              sanitize: true,
+	              smartLists: true,
+	              smartypants: false,
+	              highlight: function (code) {
+	                 return hljs.highlightAuto(code).value;
+	              }
+	            });
+	    	    
+	        	var iload=layer.load();
+	       		
+	       		var data=$('#hidden_content').text();
+   				$('#content').html(marked(data),{renderer:renderer});
+   				layer.close(iload);
+   				
+   				var dir=$('.dir')
+   				$('#content').find('h1,h2,h3,h4,h5,h6').each(function(){
+   					var rand=Math.random();
+   					$(this).prepend('<a name="'+rand+'"></a>')
+   					dir.append('<div class="dir-'+this.localName+' ellipsis"><a href="javascript:toh('+rand+')">'+$(this).text()+'</a></div>');
+   				})
+	       		function toh(rand){
+	        		$('html,body').animate({
+	        			scrollTop:$('a[name="'+rand+'"]').offset().top-100
+	        		},300);
+	        	}
+	        </script>
+	      </body>
+</html>

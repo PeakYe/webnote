@@ -1,4 +1,4 @@
-package pers.abaneo.xnote.controller;
+package pers.abaneo.xnote.controller.user;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -17,17 +17,18 @@ import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import pers.abaneo.web.utils.WebUtil;
 import pers.abaneo.web.utils.model.ResultModel;
 import pers.abaneo.web.utils.security.EncryptUtil;
 import pers.abaneo.xnote.api.model.user.User;
 import pers.abaneo.xnote.api.service.IUserService;
+import pers.abaneo.xnote.controller.BaseController;
 
 @Controller
-@RequestMapping("service/user")
+@RequestMapping("/user")
 public class UserController extends BaseController{
 	
 	@Autowired IUserService service;
@@ -47,8 +48,10 @@ public class UserController extends BaseController{
 		throw new RuntimeException();
 	}
 	
+
+	
 	@ResponseBody
-	@RequestMapping("login")
+	@RequestMapping(value="login",method=RequestMethod.POST)
 	public ResultModel login(HttpSession session,HttpServletRequest req,HttpServletResponse rep,String name,String pwd,String code,String rememberMe) throws NoSuchAlgorithmException, UnsupportedEncodingException{
 		UsernamePasswordToken token =new UsernamePasswordToken(name, pwd);
 		if("true".equals(rememberMe)){
@@ -84,9 +87,9 @@ public class UserController extends BaseController{
 //		return new ResultModel(true,"");
 //	}
 	
-	@RequestMapping("logout")
-	public String logout(){
-		SecurityUtils.getSubject().logout();
-		return "redirect:/user/login.html?logout=true";
-	}
+//	@RequestMapping("logout")
+//	public String logout(){
+//		SecurityUtils.getSubject().logout();
+//		return "redirect:/login";
+//	}
 }

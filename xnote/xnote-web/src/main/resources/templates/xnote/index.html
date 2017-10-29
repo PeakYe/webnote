@@ -1,38 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>码奴笔记本</title>
+<title>${user.name}的笔记本</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="http://nobibi.site/scripts/bootstrap/css/bootstrap.min.css"	rel="stylesheet">
-<link rel="stylesheet"	href="http://nobibi.site/scripts/layer/mobile/need/layer.css">
-<link rel="stylesheet"	href="http://nobibi.site/scripts/common/common.css">
-<link href="http://nobibi.site/scripts/markdown/markdown.css"	rel="stylesheet" />
-<link	href="http://nobibi.site/scripts/highlight/highlight-default.css"	rel="stylesheet" />
-<!--   <link rel="stylesheet" type="text/css" href="http://nobibi.site/scripts/bootstrap-treeview/css/bootstrap-treeview.css"> -->
-<!-- <link href="http://nobibi.site/scripts/context/css/context.standalone.css" rel="stylesheet" />   -->
-<link rel="stylesheet" type="text/css"	href="http://nobibi.site/scripts/bootstrap-fileview/bootstrap-fileview.css">
-<link rel="stylesheet" type="text/css"	href="http://nobibi.site/scripts/toastr/toastr.min.css">
 
-<script src="http://nobibi.site/scripts/jquery/jquery-2.1.1.min.js"></script>
-<script src="http://nobibi.site/scripts/bootstrap/js/bootstrap.min.js"></script>
-<!-- <script src="http://nobibi.site/scripts/bootstrap/js/bootstrap-contextmenu.js"></script> -->
-<script	src="http://nobibi.site/scripts/bootstrap/js/BootstrapMenu.min.js"></script>
-
-<!-- <script src="http://nobibi.site/scripts/context/js/context.js"></script> -->
-
-<script src="http://nobibi.site/scripts/common/common.js"></script>
-
-<script src="http://nobibi.site/scripts/layer/layer.js"></script>
-
-<script src="http://nobibi.site/scripts/markdown/marked.js"></script>
-<script src="http://nobibi.site/scripts/highlight/highlight.pack.js"></script>
-<script	src="http://nobibi.site/scripts/bootstrap-treeview\js\bootstrap-treeview.js"></script>
-<script	src="http://nobibi.site/scripts/bootstrap-fileview/bootstrap-fileview.js"></script>
-<script	src="http://nobibi.site/scripts/pinyin/pinyin_dict_notone.js"></script>
-<script	src="http://nobibi.site/scripts/pinyin/pinyin_dict_withtone.js"></script>
-<script	src="http://nobibi.site/scripts/pinyin/pinyinUtil.js"></script>
-<script	src="http://nobibi.site/scripts/toastr/toastr.min.js"></script>
+<#include "/public/scripts.html" >
 
 
 <style type="text/css">
@@ -55,7 +28,7 @@
 			    <button id="btndel" type="button" class="btn btn-link"><i class="glyphicon glyphicon-floppy-remove"></i> 删除</button>
 			    <button id="btnview" type="button" class="btn btn-link"><span class="glyphicon glyphicon-copyright-mark"></span> 查看</button>
 			</div>
-			<div id="content" class="markdown-body ">xxxxxxxxxxxx</div>
+			<div id="content" class="markdown-body ">---------</div>
 	      </div>
 	</div>
 	<script type="text/javascript">
@@ -102,7 +75,7 @@
 			editxnote(currentBlog.id);
 		})
 		$('#btnview').click(function() {
-			window.open('view.html?xnoteId=' + currentBlog.id);
+			window.open('/xnote/view/' + currentBlog.id);
 		})
 		$('#btndel').click(function() {
 			layer.confirm('确认删除？', {
@@ -133,7 +106,7 @@
 				area : [ '97%', '100%' ],
 				// fixed: true, //不固定
 				// maxmin: true,
-				content : 'mkedit.html?create=true&group=' + group,
+				content : '/xnote/mkedit?create=true&group=' + group,
 				scrollbar : false,
 				offset : 'r',
 				title : false,
@@ -148,7 +121,7 @@
 				area : [ '97%', '100%' ],
 				// fixed: true, //不固定
 				// maxmin: true,
-				content : 'mkedit.html?xnoteId='+xnoteId,
+				content : '/xnote/mkedit?xnoteId='+xnoteId,
 				scrollbar : false,
 				offset : 'r',
 				title : false,
@@ -198,12 +171,7 @@
 		}
 
 		function logout() {
-			c.ajax({
-				url : '/service/user/logout',
-				success : function() {
-					location.href = "/user/login.html";
-				}
-			});
+			location.href = "/logout";
 		}
 
 		var menu;
@@ -269,7 +237,7 @@
 
 				menu = new FileView({
 					contain : '#tree',
-					mainHeadHtml : '<img class="head-img" src="/imgs/head.jpg" /><div class="dropdown"><a class="head-text" data-toggle="dropdown" href="#">'+c.escapeHtml(window.localStorage['user-name'])+'</a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> <li><a href="/service/user/logout.html">退出登录</a></li></ul></div>',
+					mainHeadHtml : '<img class="head-img" src="/imgs/head.jpg" /><div class="dropdown"><a class="head-text" data-toggle="dropdown" href="#">'+c.escapeHtml(window.localStorage['user-name'])+'</a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> <li><a href="/logout">退出登录</a></li></ul></div>',
 					mainMenu : firstMenu
 				})
 				

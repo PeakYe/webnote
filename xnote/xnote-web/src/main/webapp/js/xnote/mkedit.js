@@ -262,7 +262,7 @@ $(function(){
 		$('.aceedit-select').click(function(){
 			var format=$(this).attr('format');
 			var text=acen_edit.getSelectedText();
-			acen_edit.insert(format+text+format)
+			acen_edit.insert('**'+text+'**')
 			acen_edit.focus();
 		});
 	})

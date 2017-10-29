@@ -25,7 +25,21 @@ spring:
     username: mysql
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-
+  freemarker:
+    allow-request-override: false
+    cache: true
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+#    prefix: /fk/
+#    request-context-attribute: 
+#    settings.*: 
+    suffix: .html
+#    template-loader-path: classpath:/templates/
+#    view-names:  # whitelist of view names that can be resolved
     
 mybatis:
   config-locations: classpath*:mybatis-config.xml

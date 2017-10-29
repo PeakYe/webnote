@@ -1,6 +1,6 @@
 (function(that){
 	that.config={
-		server: '/service/'
+		server: ''
 	}
 
 	var cdn="http://nobibi.site/scripts/";

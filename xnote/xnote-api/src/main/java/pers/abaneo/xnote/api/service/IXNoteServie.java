@@ -16,6 +16,7 @@ public interface IXNoteServie {
 	XNote createXnote(String title, String content,Long groupId, User User);
 
 	void updateXnote(Long id, String title, String content, User user);
+	void moveXnote(Long id, Long to, User user);
 
 	List<XNote> getXnotesByUser(User User);
 	

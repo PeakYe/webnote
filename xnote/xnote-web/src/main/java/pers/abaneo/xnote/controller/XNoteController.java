@@ -46,6 +46,12 @@ public class XNoteController {
 		servie.updateXnote(id, title, content, user);
 		return new ResultModel(true);
 	}
+	
+	@RequestMapping("/update/move")
+	public ResultModel update(Long id, Long to, User user) {
+		servie.moveXnote(id,to, user);
+		return new ResultModel(true);
+	}
 
 	@RequestMapping("/delete")
 	public ResultModel delete(Long id, User user) {

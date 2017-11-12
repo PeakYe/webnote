@@ -249,6 +249,8 @@
 				}
 				
 				menu.sortMenu();
+				
+				
 			}
 		})
 
@@ -396,6 +398,35 @@
 				isEnabled: function(row) {
 			        return row.deleteable;
 		    	}
+			},{
+				name : '转移',
+				onClick : function(row) {
+					menu.moveModel(function(menuData,to,success,error){
+						var noteId=menuData.attrs['note-id'];
+						var endret=false;
+						c.ajax({
+							url:'/service/xnote/update/move.json',
+							data:{
+								id: noteId,
+								to: to
+							},
+							method:'post',
+							async:false,
+							success:function(r){
+								endret=true;
+								if(success){
+									success();
+								}
+							},failure:function(r){
+								toastr.error('转移失败：'+r.message);
+								if(error){
+									error();
+								}
+							}
+						});
+						return endret;
+					});
+				}
 			}]
 		});
 		

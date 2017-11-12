@@ -58,7 +58,7 @@ public class ShiroConfig {
         // 默认的配置
         // 约定:/**/view* 为非用户登录情况可查看
         // 约定:/**/detail* 为用户登录情况可查看
-        filterChainDefinitionMap.put("/**/view*", "anon");
+        filterChainDefinitionMap.put("/**/view/*", "anon");
         filterChainDefinitionMap.put("/**/create*", "user");
         filterChainDefinitionMap.put("/**/detail*", "user");
         filterChainDefinitionMap.put("/**/update*", "user");

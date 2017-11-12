@@ -95,6 +95,16 @@ public class XnoteService extends BaseService implements IXNoteServie{
 		xnoteDao.updateByPrimaryKey(xnote);
 	}
 	
+	@Override
+	public void moveXnote(Long id, Long to, User user) {
+		XNote xnote=getUserXnote(id, user);
+		if(xnote==null){
+			throw new RuntimeException("修改的结果为空");
+		}
+		xnote.setGroupId(to);
+		xnoteDao.updateByPrimaryKey(xnote);
+	}
+	
 	/* (non-Javadoc)
 	 * @see pers.abaneo.xnote.service.xnote.IXnoteService#getXnotesByUser(pers.abaneo.userc.api.model.User)
 	 */

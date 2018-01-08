@@ -38,6 +38,9 @@ public class XNoteController {
 			return new ResultModel(false, "标题不能为空");
 		}
 		XNote xnote = servie.createXnote(title, content,group, user);
+		if(xnote==null){
+			return new ResultModel(false);
+		}
 		return new ResultModel(true).setData(xnote.getId());
 	}
 

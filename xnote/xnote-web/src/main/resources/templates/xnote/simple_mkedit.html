@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<#include "/public/head.html">
+<html>
+    <head>
+        <title>简易MARKDOWN编辑器</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://${cdn}/markdown/markdown.css" rel="stylesheet" />     
+        <link href="http://${cdn}/highlight/highlight-default.css" rel="stylesheet" />  
+        <link href="http://${cdn}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://${cdn}/layer/mobile/need/layer.css">
+        <link rel="stylesheet" href="http://${cdn}/common/common.css">
+        <link rel="stylesheet" href="http://${cdn}/toastr/toastr.min.css">
+        
+        <script src="http://${cdn}/jquery/jquery-3.2.1.min.js"></script>
+        <script src="http://${cdn}/bootstrap/js/bootstrap.min.js"></script>
+        <script src="http://${cdn}/common/common.js"></script>
+        <script src="http://${cdn}/layer/layer.js"></script>
+        <script src="http://${cdn}/markdown/marked.js"></script>
+        <script src="http://${cdn}/highlight/highlight.pack.js"></script>
+        <script src="http://${cdn}/toastr/toastr.min.js"></script>
+
+        <style type="text/css">
+            body{ min-height: 600px; padding-top: 40px; }
+			.title { margin: auto; width: 800px; }
+			.title input{ font-size:32px;border:none;
+				outline:none; border-bottom: 3px solid #3366CC; width:800px; margin: auto; }
+			.mkeditor{
+				padding-top: 20px;
+				margin: auto; width: 800px;
+			}
+			.mkeditor *{
+				outline: none; margin: 0;
+			}
+            .mkeditor .editor-p{
+                transition: 0.5s;
+
+                border: #99CCFF 1px solid; padding: 10px 20px;
+                border-left: 2px solid #009966;
+                margin: 10px 0;
+                overflow: hidden;
+            }
+			.mkeditor .editor-p:focus{
+                /*margin: 10px 0;*/
+                -moz-box-shadow: 0px 0px 15px #888888; /* 老的 Firefox */
+                box-shadow: 0px 0px 15px #888888;
+			}
+			.mkeditor .edit-html{
+				border-left: 1px solid #fff; padding: 0px 10px;
+				margin: 0 0; overflow: hidden;
+
+                /*transition: 1s ;*/
+                /*-webkit-transition: 1s;*/
+			}
+            .mkeditor .edit-html:hover{
+                border-left: 1px solid #009966;
+            }
+
+            .mkeditor .edit-html{
+
+            }
+
+            .hiddenx{
+                height: 0 !important;
+                border: none !important;;
+                margin: 0 !important;;
+                padding: 0 !important;;
+            }
+
+			.save-btn{ font-size:24px; line-height: 46px; width: 46px; position: fixed;
+				left:50%; bottom: 20px; height:46px; margin-left: 344px; background-color: #fff;
+				border: 2px solid #0d79d1; color:#0d79d1; text-align: center;  cursor: pointer;}
+        </style>
+	</head>
+	
+	<body>
+		<div class="title">
+			<input type="text" placeholder="输入标题" value="<#if xnote??>${xnote.title}<#else></#if>">
+		</div>
+		<div class="save-btn " id="save"><i class="glyphicon glyphicon-floppy-disk"></i></div>
+		<div class="mkeditor markdown-body" id="content">
+		</div>
+
+        <textarea name="" id="ori_val" cols="30" rows="10" type="hidden" class="hidden"><#if xnote??>${xnote.content?html}</#if></textarea>
+
+		<script>
+            marked.setOptions({
+                renderer: new marked.Renderer(),
+                gfm: true,
+                tables: true,
+                breaks: false,
+                pedantic: false,
+                wrap: 'free',
+                sanitize: true,
+                smartLists: true,
+                smartypants: false,
+                // animatedScroll: true,
+                // highlight: function(code) {
+                // 	return hljs.highlightAuto(code).value;
+                // }
+            });
+
+
+            var ed={
+                select:null
+                ,_init:function(select){
+                    this.select=$(select);
+                }
+                ,_createBottom:function(){
+                    var that=this;
+                    var blank=$('<p style="height:300px;"><p>').click(function(e){
+                        var edit=that.createEditor();
+                        $(this).before(edit);
+                        edit.focus();
+                    });
+                    this.select.append(blank);
+                }
+                ,init:function(select){
+                    this._init(select);
+                    var that=this;
+                    var editor=this.createEditor();
+                    this.select.append(editor);
+                    editor.focus();
+                    this._createBottom();
+                    //blank.click();
+                }
+                ,initContent: function(select,content){
+                    this._init(select);
+
+                    var arr=new Array();
+                    arr.push(/^([\s]*)(#+)\s[\s\S]*?([\r\n]+|$)/);
+                    arr.push(/^[\s]*(>)\s[\s\S]*?([\r\n]{2,}|$)/);
+                    arr.push(/^[\s]*(`{3,})[\s\S]*?(`{3,}|$)/);
+                    arr.push(/^[\s\S]*?(?=([\s]+((#+\s)|(`){3,}|(>+))|$))/ );
+                    var j=0;
+                    for(;;){
+                        // 最近的表达式位置
+                        // var nearest=-1;
+                        var ct=null;
+                        for(var regindex=0;regindex<arr.length;regindex++){
+                            var reg=arr[regindex];
+                            var result=content.match(reg);
+                            if(result!=null){
+                                ct=result[0];
+                                content=content.substring(ct.length,content.length);
+                                ct=ct.replace(/^\s+/,'').replace(/\s*$/,'');
+                                break;
+                            }
+                        }
+                        //mk
+                        var edit=this.createEditor();
+                        edit.text(ct);
+                        this.select.append(edit);
+                        edit.addClass('hidden');
+                        this.showHtml(edit);
+                        //end mk
+
+                        if(ct==null || content==null || content.replace(/^\s+/,'').replace(/\s*$/,'')==''){
+                            break;
+                        }
+
+
+                        j++;
+                        if(j>100){
+                            console.log(ct);
+                            console.log(content);
+                            break;
+                        }
+                    }
+                    this._createBottom();
+                }
+                ,showHtml:function($this){
+                    var that=this;
+                    var val=$this.text();
+//                    console.log($this);
+                    var id='h_'+$this.attr("id");
+                    $this.addClass('hidden');
+                    $('#'+id).remove();
+                    var html=$('<div id='+id+' class="edit-html"></div>').html(marked(val)).click(function(){
+                        $(this).addClass('hidden');
+                        var f=$('#'+this.id.substring(2)).removeClass('hidden').focus();
+                        that.moveToEnd(f[0]);
+                    });
+                    $this.after(html);
+                    return html;
+                }
+                ,hidden:function(item){
+                    item.animate({height:'0 !important', padding: '0 !important',margin: '0 !important' });
+
+                }
+                ,createEditor:function(){
+                    var that=this;
+                    var model='<textarea contenteditable="plaintext-only"></textarea>';
+                    var ed=$('<p class="editor-p" contenteditable="plaintext-only" ></p>').keydown(function(event){
+                        //console.log(event);
+                        if(event.which==13 && event.shiftKey){
+                            //回车
+                            // return;
+                            var val=$(this).text();
+                            // if(/^```/.test(val)){
+                            // 	return;
+                            // }
+                            var html=that.showHtml($(this));
+
+                            var edit=that.createEditor();
+                            html.after(edit);
+                            edit.focus();
+                            event.preventDefault();
+                            return;
+                        }
+                        if(event.which==13){
+
+                        }
+                    }).blur(function(){
+                        that.showHtml($(this));
+                    }).attr('id',Math.random()*(Math.pow(10,17)));
+
+                    ed[0].addEventListener('paste', function(event) {
+                        // 添加到事件对象中的访问系统剪贴板的接口
+                        var clipboardData = event.clipboardData,
+                            i = 0,
+                            items, item, types;
+                        if (clipboardData) {
+                            items = clipboardData.items;
+                            if (!items) {
+                                return;
+                            }
+                            item = items[0];
+                            // 保存在剪贴板中的数据类型
+                            types = clipboardData.types || [];
+                            for (; i < types.length; i++) {
+                                if (types[i] === 'Files') {
+                                    item = items[i];
+                                    break;
+                                }
+                            }
+                            // 判断是否为图片数据
+                            if (item && item.kind === 'file' && item.type.match(/^image\//i)) {
+                                // 读取该图片
+                                var file = item.getAsFile(),
+                                    reader = new FileReader();
+                                // 读取文件后将其显示在网页中
+                                reader.onload = function(e) {
+                                    // var img = new Image();
+                                    // img.src = e.target.result;
+                                    // document.body.appendChild( img );
+                                    // acen_edit.insert('![简短的图片]('+e.target.result+') ')
+                                    c.ajax({
+                                        url: '/service/xnote/upload/img',
+                                        data: {
+                                            imgData: e.target.result
+                                        },
+                                        success: function(r) {
+                                            // acen_edit.insert('![](/service/xnote/' + r.data + ')  ');
+
+                                        }
+                                    })
+                                };
+                                // 读取文件
+                                //reader.readAsDataURL(file);
+                            }
+                        }
+                    });
+
+                    return ed;
+                }
+                ,addEditor:function(editor){
+                    var editor=this.createEditor();
+                    this.select.append(editor);
+                    editor.focus();
+                    return editor;
+                }
+                ,moveToEnd:function(obj){
+                    // return;
+                    if (window.getSelection) {//ie11 10 9 ff safari
+                        obj.focus(); //解决ff不获取焦点无法定位问题
+                        var range = window.getSelection();//创建range
+                        range.selectAllChildren(obj);//range 选择obj下所有子内容
+                        range.collapseToEnd();//光标移至最后
+                    }
+                    else if (document.selection) {//ie10 9 8 7 6 5
+                        var range = document.selection.createRange();//创建选择对象
+                        //var range = document.body.createTextRange();
+                        range.moveToElementText(obj);//range定位到obj
+                        range.collapse(false);//光标移至最后
+                        range.select();
+                    }
+                }
+                ,getContent:function(){
+                    var text='';
+                    this.select.find('.editor-p').each(function(){
+                        // console.log(this)
+                        text+=$(this).text()+'\r\n';
+                    })
+                    return text;
+                }
+            }
+
+
+
+
+            var fileId=<#if xnote??>${xnote.id!'null'}<#else>null</#if>;
+            var groupId=<#if RequestParameters??>${RequestParameters.groupId!'null'}<#else>null</#if>;
+
+            if(fileId==groupId && groupId==null){
+                layer.alert("参数错误");
+            }
+
+            if(fileId!=null){
+                var con=$('#ori_val').val();
+//                console.log(con);
+                ed.initContent('#content',con);
+            }else{
+                ed.init('#content');
+            }
+
+            $('#save').click(function(){
+                var title=$('.title input').val();
+                if(title==null || title==''){
+                    $('.title input').focus();
+                    return;
+				}
+				var content=ed.getContent();
+
+                if (fileId == null) {
+                    // new
+                    url = '/service/xnote/create';
+                    //toastr.info('正在保存...');
+                    c.ajax({
+                        dataType: 'json',
+                        url: url,
+                        data: {
+                            title: title,
+                            content: content,
+                            group:groupId
+                        },
+                        success: function(r) {
+                            var data=r.data;
+                            fileId = data;
+                            toastr.info('创建成功');
+                            parent.changeXnoteCallback(fileId,groupId,title);
+                            location.href="/xnote/mkedit/"+fileId;
+                        },failure:function(r){
+                            toastr.info('创建失败：'+r);
+                        }
+                    })
+                } else {
+                    // edit
+                    url = '/service/xnote/update';
+                    c.ajax({
+                        dataType: 'json',
+                        url: url,
+                        data: {
+                            id: fileId,
+                            title: title,
+                            content: content,
+                            group:groupId
+                        },
+                        success: function(r) {
+                            var data=r.data;
+                            toastr.info('保存成功');
+                            parent.changeXnoteCallback(fileId,groupId,title);
+                            //location.href="xnote/mkedit/"+fileId;
+                        },failure:function(r){
+                            toastr.info('保存失败：'+r);
+                        }
+                    })
+                }
+
+
+            })
+
+
+		</script>
+	</body>
+</html>

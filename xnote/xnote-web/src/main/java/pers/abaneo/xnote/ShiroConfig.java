@@ -50,8 +50,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**/*.js", "anon");
         filterChainDefinitionMap.put("/**/*.png", "anon");
         // 登录注册
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/signin", "anon");
         filterChainDefinitionMap.put("/user/**", "anon");
-        filterChainDefinitionMap.put("/service/user/**", "anon");
 //        filterChainDefinitionMap.put("/xnote/**", "user");
 //        filterChainDefinitionMap.put("/service/xnote/**", "user");
 

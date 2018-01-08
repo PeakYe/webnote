@@ -23,7 +23,7 @@
 		<!-- <div class="col-md-5 col-sm-12"></div> -->
 		<div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-4 ">
 			<div class="text-center">
-				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;"><br>
+				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;display: inline-block;"><br>
 				<h3>登录XNote</h3>
 			</div>
 			<div id="error"></div>
@@ -93,7 +93,7 @@
 						pwd:pwd,
 						rememberMe: $('#remember-me').prop('checked')
 					},
-					before(){
+					before:function(){
 	        			$('input').prop('readonly','readonly');
 	        			$('#login').val('登录中...').attr('inlogin','1');
 	        		},

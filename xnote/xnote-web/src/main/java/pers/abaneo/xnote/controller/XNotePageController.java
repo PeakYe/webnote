@@ -27,10 +27,19 @@ public class XNotePageController {
 		return "xnote/index";
 	}
 	
-	@RequestMapping("mkedit")
+	@RequestMapping({"mkedit/{id}"})
+	public String mkedit(@PathVariable Long id,Long groupId,Map<String, Object> map){
+		if(id!=null){
+			XNote xnote = servie.getXnote(id);
+			map.put("xnote",xnote);
+		}
+		return "xnote/mkedit";
+	}
+
+	@RequestMapping({"mkedit"})
 	public String mkedit(Map<String, Object> map){
 		return "xnote/mkedit";
-	} 
+	}
 	
 	@RequestMapping("/view/{id}")
 	public String view(@PathVariable Long id,Map<String, Object> map) {

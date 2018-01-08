@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="http://nobibi.site/scripts/bootstrap/css/bootstrap.min.css">
 
 	<script src="http://nobibi.site/scripts/require.js"></script>
-	<script type="text/javascript" src="/config.js"></script>
+	<script type="text/javascript" src="/js/public//config.js"></script>
 	<style>
 		.error{ color:red; font-weight: normal;}
 	</style>
@@ -21,7 +21,7 @@
 		<!-- <div class="col-md-5 col-sm-12"></div> -->
 		<div class="col-md-4 col-sm-12 col-xs-12 col-md-offset-4 ">
 			<div class="text-center">
-				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;"><br>
+				<img src="" class="" alt="￣ω￣=" style="margin-top: 50px; margin-bottom: 20px;display: inline-block;"><br>
 				<h3>注册XNote</h3>
 			</div>
 			<div id="error"></div>
@@ -34,19 +34,18 @@
 			        <div class="form-group">
 			        	<label for="name">登录名&nbsp;<span class="error name hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label>
 			            <input type="text" class="form-control" placeholder="name" id="name">
-			        </div>
-			        <div class="form-group">
-			        	<label for="password">密码&nbsp;<span class="error pwd hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label> 
-			            <input type="password" class="form-control" placeholder="password" id="pwd">
-			        </div>
-			        <input id="login" type="button" class="btn btn-primary" style="width:100%;" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录"></input> 
-			        <br><br>
+						</div>
+						<div class="form-group">
+							<label for="password">密码&nbsp;<span class="error pwd hidden"><i class="glyphicon glyphicon-remove"></i><msg></msg></span></label>
+							<input type="password" class="form-control" placeholder="password" id="pwd">
+						</div>
+						<input id="login" type="button" class="btn btn-primary" style="width:100%;" value="登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录"></input>
+						<br><br>
 
-				</div>
-		    </form>
+					</div>
+				</form>
 		    <br>
-		    
-">点此登录(￣▽￣)／</a></div>
+			<a href="/login">点此登录(￣▽￣)／</a></div>
 			
 			<br>
 
@@ -88,7 +87,7 @@
 					},
 					success:function(r){
 						//layer.alert(r.data)
-"
+						window.location.href="/login";
 					},
 					failure:function(r){
 						var code=r.errCode;

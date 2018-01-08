@@ -72,7 +72,7 @@ public class UserController extends BaseController{
 				String url=savedReq.getRequestUrl();
 				return new ResultModel(url);
 			}
-			return new ResultModel("/xnote/index.html");
+			return new ResultModel("/xnote");
 					
 		} catch (AuthenticationException e) {
 			logger.debug(e.getMessage());

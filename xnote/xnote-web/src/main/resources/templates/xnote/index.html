@@ -1,34 +1,69 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>${user.name}的笔记本</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<#include "/public/head.html">
 
-<#include "/public/scripts.html" >
+	<link rel="stylesheet" href="http://${cdn}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://${cdn}/layer/mobile/need/layer.css">
+	<link rel="stylesheet" href="http://${cdn}/common/common.css">
+	<link rel="stylesheet" href="http://${cdn}/markdown/markdown.css" rel="stylesheet" />
+	<link rel="stylesheet" href="http://${cdn}/highlight/highlight-default.css" rel="stylesheet" />
+	<link rel="stylesheet" href="http://${cdn}/bootstrap-fileview/bootstrap-fileview.css">
+	<link rel="stylesheet" href="http://${cdn}/toastr/toastr.min.css">
+
+	<script src="http://${cdn}/jquery/jquery-2.1.1.min.js"></script>
+	<script src="http://${cdn}/bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://${cdn}/bootstrap/js/BootstrapMenu.min.js"></script>
+	<script src="http://${cdn}/common/common.js"></script>
+	<script src="http://${cdn}/layer/layer.js"></script>
+	<script src="http://${cdn}/markdown/marked.js"></script>
+	<script src="http://${cdn}/highlight/highlight.pack.js"></script>
+	<script src="http://${cdn}/bootstrap-fileview/bootstrap-fileview.js"></script>
+	<script src="http://${cdn}/pinyin/pinyin_dict_notone.js"></script>
+	<script src="http://${cdn}/pinyin/pinyin_dict_withtone.js"></script>
+	<script src="http://${cdn}/pinyin/pinyinUtil.js"></script>
+	<script src="http://${cdn}/toastr/toastr.min.js"></script>
 
 
 <style type="text/css">
-	.head-img{ width:100px; border-radius: 50px; margin:15px;}
+	/*body{min-height:400px; position: relative;}*/
+	.head-img{ width:60px; border-radius: 30px; margin:15px;}
+	.xnote-frame{ border:none; margin: 0; padding: 0;
+		width: 100%; height: 100%;}
+	.xnote-container{ height: 100%; overflow:hidden; width: 100%;}
 	.head-text{ color:#fff; font-size:16px;}
 	.head-text:HOVER,.head-text:FOCUS { color:#fff; }
-	#note-detail{position: absolute; top: 0px; bottom: 0px; right:0px;left:378px;min-width:640px; heightL:100%; overflow: auto; padding-right: 10px;}
+	#note-detail{position: absolute; top: 0px; bottom: 0px; right:0px;left:318px;min-width:640px; heightL:100%; overflow: auto; padding-right: 0px;}
 /* 	#content img{ max-width: 100%;} */
 </style>
 </head>
 <body>
 	<div id="tree"
-		style="position: absolute; top: 0px; bottom: 0px; width:374px;">
+		style="position: absolute; top: 0px; bottom: 0px; width:314px;">
 	</div>
 	<div id="note-detail" style="" class="scroll-default">
-		 <div id="container" class="hidden">
-			<h2 id="title">所有笔记</h2>
-			<div class="optbtns">
-			    <button id="btnedit" type="button" class="btn btn-link"><i class="glyphicon glyphicon-edit"></i> <span>编辑</span></button>
-			    <button id="btndel" type="button" class="btn btn-link"><i class="glyphicon glyphicon-floppy-remove"></i> 删除</button>
-			    <button id="btnview" type="button" class="btn btn-link"><span class="glyphicon glyphicon-copyright-mark"></span> 查看</button>
-			</div>
-			<div id="content" class="markdown-body ">---------</div>
+		<!--<ul id="myTab" class="nav nav-tabs">-->
+			<!--&lt;!&ndash;<li><a href="#ios" data-toggle="tab">iOS</a></li>&ndash;&gt;-->
+		<!--</ul>-->
+		<!--<div id="myTabContent" class="tab-content">-->
+			<!--<div class="tab-pane fade" id="ios">-->
+				<!--<p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple-->
+					<!--TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>-->
+			<!--</div>-->
+		<!--</div>-->
+		 <div id="container" class="xnote-container">
+			<!--<h2 id="title">所有笔记</h2>-->
+			<!--<div class="optbtns">-->
+			    <!--<button id="btnedit" type="button" class="btn btn-link"><i class="glyphicon glyphicon-edit"></i> <span>编辑</span></button>-->
+			    <!--<button id="btndel" type="button" class="btn btn-link"><i class="glyphicon glyphicon-floppy-remove"></i> 删除</button>-->
+			    <!--<button id="btnview" type="button" class="btn btn-link"><span class="glyphicon glyphicon-copyright-mark"></span> 查看</button>-->
+			<!--</div>-->
+
+			<!--<div id="content" class="markdown-body ">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</div>-->
 	      </div>
 	</div>
 	<script type="text/javascript">
@@ -36,23 +71,43 @@
 		var currentBlog;
 		function showContent(id, el) {
 			var id=id.split('_')[1];
-			c.ajax({
-				url : '/service/xnote/detail',
-				data : {
-					id : id
-				},
-				success : function(r) {
-					var data = r.data;
-					currentBlog = data;
-					$('#container').removeClass('hidden');
-					$('#title').text(data.title);
-					$('#content').html(marked(data.content),{renderer:renderer});
-					// $(el).addClass('active').siblings().removeClass('active');
-				}
-			})
-		}
+//			c.ajax({
+//				url : '/service/xnote/detail',
+//				data : {
+//					id : id
+//				},
+//				success : function(r) {
+//					var data = r.data;
+//					currentBlog = data;
+////					$('#container').removeClass('hidden');
+////					$('#title').text(data.title);
+////					$('#content').html(marked(data.content),{renderer:renderer});
+//					// $(el).addClass('active').siblings().removeClass('active');
+//
+//				}
+//			})
 
-		var renderer = new marked.Renderer();
+
+//			var $tab=$('a[tabid='+id+']');
+//			if($tab.length>0){
+//				$tab.click();
+//			}else{
+//			    var tab=$('<li><a tabid="'+id+'" href="#if_'+id+'" data-toggle="tab">'+el+'</a></li>').click(function(){
+//
+//				});
+//
+//                $('#myTab').append(tab);
+//            }
+            $('#container').html('<iframe id="if_'+id+'" src="/xnote/mkedit/'+id+'" class="xnote-frame" onload="iframeLoad(this)"></iframe>');
+        }
+
+        function iframeLoad(frame)
+        {
+//            frame.height=0;
+//            frame.height=frame.contentWindow.document.body.scrollHeight+100;
+        }
+
+        var renderer = new marked.Renderer();
 	    renderer.link = function (href,title,text) {
 	    	return '<a href="'+href+'" target="_blank">'+text+'</a>';
 	    };
@@ -101,18 +156,28 @@
 		})
 
 		function newxnote(group) {
-			layer.open({
-				type : 2,
-				area : [ '97%', '100%' ],
-				// fixed: true, //不固定
-				// maxmin: true,
-				content : '/xnote/mkedit?create=true&group=' + group,
-				scrollbar : false,
-				offset : 'r',
-				title : false,
-				closeBtn : 0
-				//shadeClose : true
-			});
+//			layer.open({
+//				type : 2,
+//				area : [ '97%', '100%' ],
+//				// fixed: true, //不固定
+//				// maxmin: true,
+//				content : '/xnote/mkedit?create=true&group=' + group,
+//				scrollbar : false,
+//				offset : 'r',
+//				title : false,
+//				closeBtn : 0
+//				//shadeClose : true
+//			});
+
+//            layer.open({
+//                type: 2,
+//                area : [ '900px', '100%' ],
+//                fixed: false,
+//                maxmin: true,
+//                content: '/xnote/mkedit?groupId=' + group
+//            });
+
+            $('#container').html('<iframe src="/xnote/mkedit?groupId='+group+'" class="xnote-frame" onload="iframeLoad(this)"></iframe>');
 		}
 		
 		function editxnote(xnoteId) {
@@ -129,6 +194,39 @@
 				//shadeClose : true,
 			});
 		}
+
+        /**
+		 * for simple mkediter
+         * @param id
+         */
+        function changeXnoteCallback(id,groupId,title) {
+            var fid='f_'+id;
+            var f=menu.findMenu(fid);
+            if(f!=null){
+                menu.modifyMenu(fid,{
+                    id:fid,
+                    parent:groupId,
+                    text:title,
+                    isfolder: false
+                })
+			}else{
+                createNoteMenu(id,groupId,title);
+			}
+
+        }
+
+        function saveXnoteCallback(id,groupId,title){
+            if(menu.findMenu('f_'+id)){
+                menu.modifyMenu('f_'+id,{
+                    id:'f_'+id,
+                    parent:groupId,
+                    text:title,
+                    isfolder: false
+                });
+            }else{
+                createNoteMenu(id,groupId,title);
+            }
+        }
 
 		function newxnoteCallback(id) {
 			if(id==null){
@@ -183,16 +281,21 @@
 				isfolder: false,
 				prefix : '<i class="glyphicon glyphicon-file" ></i>',
 				click:function(row){
-					showContent(this.id);
+					showContent(this.id,title);
 				}
 			});
 			//toastr.info('已创建文件夹 “'+title+'”')
 		}
-		
+		console.log('v3');
 		c.ajax({
 			url : '/service/xnote/group/detaillist.json',
 			success : function(r) {
 				var firstMenu = {};
+				firstMenu['zhanghu']={
+					id: 'zhanghu',
+					text: '设置'
+					,click:function(){}
+				};
 				var secondMenu = {};
 				//文件夹
 				for ( var i in r.data) {
@@ -200,9 +303,10 @@
 
 					if (!d.parentId) {
 						//一级菜单
-						firstMenu[d.id] = {
+                        secondMenu[d.id] = {
 							id : d.id,
 							text : d.name
+//							,parent: 'x'
 						}
 					} else {
 						//二级菜单
@@ -232,12 +336,12 @@
 					}
 				}
 
-// 				console.log(firstMenu);
-// 				console.log(secondMenu);
+ 				console.log(firstMenu);
+ 				console.log(secondMenu);
 
 				menu = new FileView({
 					contain : '#tree',
-					mainHeadHtml : '<img class="head-img" src="/imgs/head.jpg" /><div class="dropdown"><a class="head-text" data-toggle="dropdown" href="#">'+c.escapeHtml(window.localStorage['user-name'])+'</a><ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> <li><a href="/logout">退出登录</a></li></ul></div>',
+					mainHeadHtml : '<img class="head-img" src="/imgs/head.jpg" />',
 					mainMenu : firstMenu
 				})
 				
@@ -254,63 +358,63 @@
 			}
 		})
 
-		var menu = new BootstrapMenu('.file-view-main ul,.file-view-main ul li', {
-			fetchElementData : function(row) {
-				return {
-					parent : row.attr('main-menu-id'),
-					deletedable : row.attr('deletedable'),
-					mainMenuId: row.attr('main-menu-id')
-				}
-			},
-
-			actions : [ {
-				name : '创建文件夹',
-				onClick : function(row) {
-					
-					layer.prompt({title: '文件夹名称', formType: 0, maxlength:20 }, function(text, index){
-						layer.close(index);
-						c.ajax({
-							url : '/service/xnote/group/create.json',
-							data : {
-								name : text
-							},
-							success : function(r) {
-								var d=r.data;
-								menu.createMenu({
-							 		id:d.id,
-							 		text: d.name,
-							 		parent:null
-							 	});
-							 	toastr.info('已创建文件夹 “'+d.name+'”');
-							}
-						})
-					});
-				}
-			},{
-				name : '删除文件夹',
-				onClick : function(row) {
-					
-					layer.confirm('确认删除？',{
-						btn:['是','点错了']
-					},function(index){
-						c.ajax({
-							url : '/service/xnote/group/delete.json',
-							data : {
-								id : row.mainMenuId
-							},
-							success : function(r) {
-								var d=r.data;
-								menu.deleteMenu(r.data);
-							}
-						});
-						layer.close(index);
-					});
-				},
-				isEnabled: function(row) {
-			        return row.deletedable==null?true:false;
-		    	}
-			} ]
-		});
+//		var menu = new BootstrapMenu('.file-view-main ul,.file-view-main ul li', {
+//			fetchElementData : function(row) {
+//				return {
+//					parent : row.attr('main-menu-id'),
+//					deletedable : row.attr('deletedable'),
+//					mainMenuId: row.attr('main-menu-id')
+//				}
+//			},
+//
+//			actions : [ {
+//				name : '创建文件夹',
+//				onClick : function(row) {
+//
+//					layer.prompt({title: '文件夹名称', formType: 0, maxlength:20 }, function(text, index){
+//						layer.close(index);
+//						c.ajax({
+//							url : '/service/xnote/group/create.json',
+//							data : {
+//								name : text
+//							},
+//							success : function(r) {
+//								var d=r.data;
+//								menu.createMenu({
+//							 		id:d.id,
+//							 		text: d.name,
+//							 		parent:null
+//							 	});
+//							 	toastr.info('已创建文件夹 “'+d.name+'”');
+//							}
+//						})
+//					});
+//				}
+//			},{
+//				name : '删除文件夹',
+//				onClick : function(row) {
+//
+//					layer.confirm('确认删除？',{
+//						btn:['是','点错了']
+//					},function(index){
+//						c.ajax({
+//							url : '/service/xnote/group/delete.json',
+//							data : {
+//								id : row.mainMenuId
+//							},
+//							success : function(r) {
+//								var d=r.data;
+//								menu.deleteMenu(r.data);
+//							}
+//						});
+//						layer.close(index);
+//					});
+//				},
+//				isEnabled: function(row) {
+//			        return row.deletedable==null?true:false;
+//		    	}
+//			} ]
+//		});
 				
 		var menu = new BootstrapMenu('.sub-menu-ul li,.sub-menu-ul', {
 			fetchElementData : function(row) {

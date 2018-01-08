@@ -4,7 +4,7 @@
     <head>
         <title>markdown编辑器</title>
         
-       	<#include "/public/scripts.html" >
+       	<#include "/public/scripts.html" />
         <script src="${jspath}/xnote/mkedit.js"></script>
         <style type="text/css">
             * {
@@ -21,6 +21,9 @@
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 background-color: #ebebeb;
             }
+            .ace_editor{
+                font-size:16px;
+            }
             #toolbar {
                 height: 24px;
                 background-color: #f3f3f3;
@@ -29,6 +32,7 @@
             }
 			#toolbar span{ margin: 0 2px; border: 1px #fff; padding: 0 2px; cursor: pointer;	font-weight: bold;}
 			#toolbar .group{ display: inline; margin: 0 4px;}
+            #toolbar .view{ float: right; font-weight: bold;}
 			#toolbar span:HOVER{color: #222;}
             #container {
                 overflow: auto;
@@ -40,14 +44,18 @@
             }
             #editor-column,
             #preview-column {
-                width: 50%;
+                width: 0%;
                 
                 height: 100%;
                 overflow: auto;
                 position: relative;
                 background-color: #fff;
             }
-            
+            #editor-column{
+                border-right:1px solid #ccc;
+                margin-right: -1px;
+            }
+
             #preview-column{
             	padding:20px;
             }
@@ -63,11 +71,9 @@
                 height: 100%;
                 width: 100%;
             }
-
-
-			.ace_editor{ font-size: 16px;  }
 			
 			#title{ border:none; width: auto; padding: 10px 42px; width: 100%; margin: 0px; font-weight: bold;}
+            #title:before{content:'---'}
 			.title{ margin: 1px 0px; }
 			
 			.sace_scrollbar-v::-webkit-scrollbar-track,.ace_scrollbar-v::-webkit-scrollbar-track
@@ -104,10 +110,18 @@
 	            <span class="aceedit-insert" posx="0" text="##### ">H5</span>
 	            <span class="aceedit-insert" posx="0" text="###### ">H6</span>
             </div>
-        	<div class="group"><i class="glyphicon glyphicon-bold aceedit-select" format="**"></i></div>
-        	<div class="group"><i class="glyphicon glyphicon-italic aceedit-select" format="*"></i></div>
+        	<div class="group"><span class="glyphicon glyphicon-bold aceedit-select" format="**"></span></div>
+        	<div class="group"><span class="glyphicon glyphicon-italic aceedit-select" format="*"></span></div>
 <!--         	<div class="group"><i class="glyphicon glyphicon-link"></i></div> -->
-        	<div class="group"><i class="glyphicon glyphicon-list aceedit-insert" posx="0" text="- "></i></div>
+        	<div class="group"><span class="glyphicon glyphicon-list aceedit-insert" posx="0" text="- "></span></div>
+            <div class="group">
+                <span class="aceedit-select" format="`" >&lt;/&gt;</span>
+                <span class="aceedit-select" format="```" changeline="true">&lt;.../&gt;</span>
+            </div>
+
+            <div class="view">
+                <span id="view-aa">AA</span><span id="view-av">AV</span><span id="view-vv">VV</span>
+            </div>
         </div>
        
         <div id="container">
@@ -124,7 +138,17 @@
             </div>
         </div>
         <script>
-        	
+            <#if xnote??>
+                var fileId="${xnote.id}";
+                var groupId= ${xnote.groupId};
+                var content='${xnote.content?js_string}';
+                var title='${xnote.title?js_string}';
+                <#else>
+                var fileId=null;
+                var content=null;
+                var title=null;
+                var groupId=${RequestParameters.groupId!'null'};
+            </#if>
         </script>
     </body>
 

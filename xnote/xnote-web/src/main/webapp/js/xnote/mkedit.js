@@ -1,8 +1,25 @@
-var fileId = c.getUrlParamter('xnoteId');
-var groupId=c.getUrlParamter('group');
+// var fileId = c.getUrlParamter('xnoteId');
+// var groupId=c.getUrlParamter('group');
+
 var acen_edit;
 
 $(function(){
+	//AA AV VV
+	(function(){
+		$('#view-aa').click(function(){
+			$('#editor-column').removeClass('hidden').css("width","100%");
+            $('#preview-column').addClass('hidden');
+		})
+        $('#view-av').click(function(){
+            $('#editor-column').removeClass('hidden').css("width","50%");
+            $('#preview-column').removeClass('hidden').css("width","50%");
+        })
+        $('#view-vv').click(function(){
+            $('#editor-column').addClass('hidden');
+            $('#preview-column').removeClass('hidden').css("width","100%");
+        }).click();
+	})();
+
 	(function(){
 		acen_edit = ace.edit('mdeditor');
 		acen_edit.setTheme('ace/theme/xcode');
@@ -13,7 +30,7 @@ $(function(){
 //		$("#mdeditor").keyup(function() {
 //		
 //		});
-		
+		console.log(acen_edit);
 	})();
 	
 	(function(){
@@ -74,7 +91,7 @@ $(function(){
 				return;
 			}
 			var url;
-			if (fileId == null) {
+			if (!fileId) {
 				// new
 				url = '/service/xnote/create';
 				//toastr.info('正在保存...');
@@ -93,7 +110,13 @@ $(function(){
 //							skin: 'layui-layer-lan',
 //							offset: ['80%', '5%']
 //						});
+
 						toastr.info('保存成功');
+
+                        window.parent.saveXnoteCallback(fileId,groupId,title);
+
+                        //parent.layer.close(index);
+
 					},failure:function(r){
 						toastr.info('创建失败：'+r);
 					}
@@ -112,34 +135,17 @@ $(function(){
 					},
 					success: function(r) {
 						var data=r.data;
-						toastr.info('创建成功');
+						toastr.info('保存成功');
+                        window.parent.saveXnoteCallback(fileId,groupId,title);
 					},failure:function(r){
-						toastr.info('创建失败：'+r);
+						toastr.info('保存失败：'+r);
 					}
 				})
 			}
 		});
 	})();
 	
-	{
-		if (fileId != null) {
-			var iload = layer.load(0, {
-				shade: 0.3
-			});
-			c.ajax({
-				url: '/service/xnote/detail',
-				data: {
-					id: fileId
-				},
-				success: function(r) {
-					var data=r.data;
-					acen_edit.setValue(data.content);
-					$('#title').val(data.title);
-					layer.close(iload);
-				}
-			})
-		}
-	}
+
 	{
 		 //init
 	    marked.setOptions({
@@ -261,9 +267,27 @@ $(function(){
 		
 		$('.aceedit-select').click(function(){
 			var format=$(this).attr('format');
-			var text=acen_edit.getSelectedText();
-			acen_edit.insert('**'+text+'**')
+            var changeline=$(this).attr('changeline')=='true';
+            var text=acen_edit.getSelectedText();
+            if(changeline){
+                acen_edit.insert('\n'+format+'\n'+text+'\n'+format+'\n');
+            }else{
+                acen_edit.insert(format+text+format);
+            }
 			acen_edit.focus();
 		});
 	})
+
+
+    {
+        if (fileId) {
+            if(content){
+                acen_edit.setValue(content);
+            }
+            if(title){
+                $('#title').val(title);
+            }
+
+        }
+    }
 })

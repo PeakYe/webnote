@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<#include "/public/head.html">
+<head>
+    <meta charset="UTF-8">
+    <title>ueditor demo</title>
+
+    <link rel="stylesheet" href="http://${cdn}/toastr/toastr.min.css">
+    <style>
+        *{ margin:0; padding: 0;}
+        #container{ margin: 0px 0%; overflow: visible; padding: 0px; width: 800px;}
+        #title{margin: auto; font-size: 26px; border:none; outline: none; border-bottom: 1px solid #ccc;
+            margin-bottom: 2px;width: 800px; padding: 10px 0px;}
+    </style>
+</head>
+
+    <body>
+    <#if xnote?exists>
+        <input id="title" type="text" placeholder="标题" value="${xnote.title}">
+        <input type="hidden" id="id" value="${xnote.id}">
+        <input type="hidden" id="content" value="${xnote.content?html}">
+    <#else>
+        <input id="title" type="text" placeholder="标题" value="">
+    </#if>
+
+<input type="hidden" id="groupId" value="${groupId!}">
+<!-- 加载编辑器的容器 -->
+<div id="container" name="content" type="text/plain">
+</div>
+<!-- 配置文件 -->
+<script type="text/javascript" src="/js/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/js/ueditor/ueditor.all.js"></script>
+
+<script type="text/javascript" src="/js/ueditor/ext/button.ext.js"></script>
+<script src="http://${cdn}/jquery/jquery-2.1.1.min.js"></script>
+<script src="http://${cdn}/toastr/toastr.min.js"></script>
+<script src="http://${cdn}/layer/layer.js"></script>
+
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    //
+    var content=$('#content').val();
+    var ue = UE.getEditor('container');
+    var saveUrl="/service/xnote/save";
+
+    ue.ready(function(){
+        ue.setContent(content);
+//        ue.setHeight("");
+//        ue.setWidth("600")
+    });
+
+    function callSaveBack(data){
+
+    }
+</script>
+</body>
+
+</html>

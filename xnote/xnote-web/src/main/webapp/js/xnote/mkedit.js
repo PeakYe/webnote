@@ -6,18 +6,59 @@ var acen_edit;
 $(function(){
 	//AA AV VV
 	(function(){
+
+		var time=600;
 		$('#view-aa').click(function(){
-			$('#editor-column').removeClass('hidden').css("width","100%");
-            $('#preview-column').addClass('hidden');
+            // change($('#editor-column'),$('#preview-column'));
+            $('#editor-column').animate({
+				'width':'100%',
+                'margin-left':'0'
+			},time,function () {
+				
+            });
+            $('#preview-column').animate({
+                'width':'100%',
+				'margin-right':'-100%'
+			},time,function () {
+                if(acen_edit){
+                    acen_edit.resize();
+                }
+            });
+
+
 		})
         $('#view-av').click(function(){
-            $('#editor-column').removeClass('hidden').css("width","50%");
-            $('#preview-column').removeClass('hidden').css("width","50%");
+        	console.log(acen_edit)
+            // avg($('#editor-column'),$('#preview-column'));
+            $('#editor-column').animate({
+                'width':'50%',
+                'margin-left':'0'
+            },time);
+            $('#preview-column').animate({
+                'width':'50%',
+                'margin-right':'0'
+            },time,function () {
+                if(acen_edit){
+                    acen_edit.resize();
+                }
+            });
+
         })
         $('#view-vv').click(function(){
-            $('#editor-column').addClass('hidden');
-            $('#preview-column').removeClass('hidden').css("width","100%");
-        }).click();
+            $('#editor-column').animate({
+                'width':'100%',
+                'margin-left':'-100%'
+            },time);
+            $('#preview-column').animate({
+                'width':'100%',
+                'margin-right':'0'
+            },time,function () {
+                if(acen_edit){
+                    acen_edit.resize();
+                }
+            })
+
+        })
 	})();
 
 	(function(){
@@ -101,7 +142,8 @@ $(function(){
 					data: {
 						title: title,
 						content: acen_edit.getValue(),
-						group:groupId
+						group:groupId,
+						type:'mkdown'
 					},
 					success: function(r) {
 						var data=r.data;
@@ -113,7 +155,7 @@ $(function(){
 
 						toastr.info('保存成功');
 
-                        window.parent.saveXnoteCallback(fileId,groupId,title);
+                        window.parent.changeXnoteCallback(fileId,groupId,title);
 
                         //parent.layer.close(index);
 
@@ -136,7 +178,7 @@ $(function(){
 					success: function(r) {
 						var data=r.data;
 						toastr.info('保存成功');
-                        window.parent.saveXnoteCallback(fileId,groupId,title);
+                        window.parent.changeXnoteCallback(fileId,groupId,title);
 					},failure:function(r){
 						toastr.info('保存失败：'+r);
 					}
@@ -194,9 +236,7 @@ $(function(){
 			}
 		})
 	}
-	 
-	
-	
+
 	(function() {
 	    var l = $("#mdeditor");
 	    var r = $("#preview-column");
@@ -235,14 +275,16 @@ $(function(){
 
 	(function(){
 		$('#closeIframe').click(function(){
-			var index = parent.layer.getFrameIndex(window.name);
-			var isCreate = c.getUrlParamter('create')
-			if(isCreate!=null){
-			   parent.newxnoteCallback(fileId);
-			}else{
-			   parent.editxnoteCallback(fileId);
-			}
-			parent.layer.close(index);
+			// var index = parent.layer.getFrameIndex(window.name);
+			// var isCreate = c.getUrlParamter('create')
+			// if(isCreate!=null){
+			//    parent.newxnoteCallback(fileId);
+			// }else{
+			//    parent.editxnoteCallback(fileId);
+			// }
+			// parent.layer.close(index);
+
+			parent.newxnoteCallback(fileId);
 		    
 		});
 	})()
@@ -283,11 +325,12 @@ $(function(){
         if (fileId) {
             if(content){
                 acen_edit.setValue(content);
+                acen_edit.navigateTo(0,0);
+                acen_edit.focus()
             }
             if(title){
                 $('#title').val(title);
             }
-
         }
     }
 })

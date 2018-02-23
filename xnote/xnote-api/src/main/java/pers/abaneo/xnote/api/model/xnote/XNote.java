@@ -13,7 +13,7 @@ public class XNote {
 
     private Long groupId;
 
-    private Byte type;
+    private String type;
 
     private String label;
 
@@ -67,11 +67,11 @@ public class XNote {
         this.groupId = groupId;
     }
 
-    public Byte getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(String type) {
         this.type = type;
     }
 

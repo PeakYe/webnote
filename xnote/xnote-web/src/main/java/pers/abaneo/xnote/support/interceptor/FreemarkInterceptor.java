@@ -30,7 +30,7 @@ public class FreemarkInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("freemark interceptor");
+//		System.out.println("freemark interceptor");
 		User user=(User) SecurityUtils.getSubject().getPrincipal();
 		request.setAttribute("user", user);
 		return true;

@@ -13,7 +13,7 @@ public interface IXNoteServie {
 	
 	XNote getXnote(Long xnoteId);
 
-	XNote createXnote(String title, String content,Long groupId, User User);
+	XNote createXnote(String title, String content, Long groupId, String type, User User);
 
 	void updateXnote(Long id, String title, String content, User user);
 	void moveXnote(Long id, Long to, User user);

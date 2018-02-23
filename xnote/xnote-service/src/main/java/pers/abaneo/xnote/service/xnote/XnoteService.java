@@ -53,7 +53,7 @@ public class XnoteService extends BaseService implements IXNoteServie{
 	 * @see pers.abaneo.xnote.service.xnote.IXnoteService#createXnote(java.lang.String, java.lang.String, pers.abaneo.userc.api.model.User)
 	 */
 	@Override
-	public XNote createXnote(String title,String content,Long groupId, User user){
+	public XNote createXnote(String title, String content, Long groupId, String type, User user){
 		if(title==null){
 			logger.debug("title null");
 			return null;
@@ -77,6 +77,7 @@ public class XnoteService extends BaseService implements IXNoteServie{
 		xnote.setPraises(0);
 		xnote.setDeleted(0);
 		xnote.setGroupId(groupId);
+		xnote.setType(type);
 		xnoteDao.insert(xnote);
 		return xnote;
 	}

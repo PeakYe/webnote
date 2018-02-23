@@ -1,11 +1,5 @@
 package pers.abaneo.xnote.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
@@ -13,13 +7,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
+import pers.abaneo.web.utils.fileuploader.FileManager;
+import pers.abaneo.web.utils.model.ResultModel;
 import pers.abaneo.xnote.api.model.user.User;
 import pers.abaneo.xnote.api.model.xnote.XNote;
 import pers.abaneo.xnote.api.model.xnote.XNoteGroup;
 import pers.abaneo.xnote.api.service.IXNoteServie;
-import pers.abaneo.web.utils.fileuploader.FileManager;
-import pers.abaneo.web.utils.model.ResultModel;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("service/xnote")
@@ -37,7 +37,7 @@ public class XNoteController {
 		if (StringUtils.isEmpty(title)) {
 			return new ResultModel(false, "标题不能为空");
 		}
-		XNote xnote = servie.createXnote(title, content,group, user);
+		XNote xnote = servie.createXnote(title, content,group, "mkdown", user);
 		if(xnote==null){
 			return new ResultModel(false);
 		}
@@ -48,6 +48,23 @@ public class XNoteController {
 	public ResultModel update(Long id, String content, String title, User user) {
 		servie.updateXnote(id, title, content, user);
 		return new ResultModel(true);
+	}
+
+	@RequestMapping("/save")
+	public ResultModel save(Long id, String content, String title,Long group,String type, User user) {
+		if(id==null){
+			if (StringUtils.isEmpty(title)) {
+				return new ResultModel(false, "标题不能为空");
+			}
+			XNote xnote = servie.createXnote(title, content,group,type, user);
+			if(xnote==null){
+				return new ResultModel(false);
+			}
+			return new ResultModel(true).setData(xnote.getId());
+		}else{
+			servie.updateXnote(id, title, content, user);
+			return new ResultModel(true).setData(id);
+		}
 	}
 	
 	@RequestMapping("/update/move")
@@ -102,7 +119,20 @@ public class XNoteController {
 		File file = fileManager.saveCodeImg(imgData);
 		return new ResultModel(file.getName());
 	}
-	
+
+	@RequestMapping("/upload/file")
+	public ResultModel uploadImg(@RequestParam MultipartFile file, HttpServletRequest request){
+		try {
+			fileManager.saveFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ResultModel(false,"save error");
+		}
+
+		return new ResultModel(file.getName());
+	}
+
+
 	@RequestMapping("{fileName}.{suffix}")
 	public void readImg(@PathVariable("fileName") String fileName, @PathVariable("suffix") String suffix,
 			HttpServletResponse response) throws IOException {

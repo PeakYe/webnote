@@ -19,7 +19,7 @@ public class TestIXnoteService {
 	@Test
 	public void testInteface() throws Exception {
 		User user=new User();
-		XNote xnote=service.createXnote("test xnote","xxxxxxxxxxx",12L,user);
+		XNote xnote=service.createXnote("test xnote","xxxxxxxxxxx",12L, "", user);
 		System.out.println("xnote create success"+xnote.getId());
 		
 		service.updateXnote(xnote.getId(), "test xnote update", "ssssssssss", user);

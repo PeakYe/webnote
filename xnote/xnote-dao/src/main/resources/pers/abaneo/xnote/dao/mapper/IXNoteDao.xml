@@ -38,7 +38,7 @@
       praises, opposes, comments, 
       deleted, content)
     values (#{createTime,jdbcType=TIMESTAMP}, #{createrId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
-      #{groupId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{label,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR},
       #{praises,jdbcType=INTEGER}, #{opposes,jdbcType=INTEGER}, #{comments,jdbcType=INTEGER}, 
       #{deleted,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
@@ -48,7 +48,7 @@
       creater_id = #{createrId,jdbcType=BIGINT},
       title = #{title,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=BIGINT},
-      type = #{type,jdbcType=TINYINT},
+      type = #{type,jdbcType=VARCHAR},
       label = #{label,jdbcType=VARCHAR},
       praises = #{praises,jdbcType=INTEGER},
       opposes = #{opposes,jdbcType=INTEGER},

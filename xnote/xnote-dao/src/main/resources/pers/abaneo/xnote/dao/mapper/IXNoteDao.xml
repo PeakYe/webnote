@@ -7,7 +7,7 @@
     <result column="creater_id" jdbcType="BIGINT" property="createrId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
-    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="praises" jdbcType="INTEGER" property="praises" />
     <result column="opposes" jdbcType="INTEGER" property="opposes" />
